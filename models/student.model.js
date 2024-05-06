@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 const db = require('../config/db');
 const { Schema } = mongoose;
 
-const newTutorialVideoSchema = new Schema({
-    tutorID: {
+const studentSchema = new Schema({
+    studentID: {
         type: String,
     },
-    title: {
+    fullName: {
         type: String,
     },
-    category: {
+    email: {
         type: String,
     },
-    description: {
+    phone: {
         type: String,
     },
     dateCreated: {
@@ -21,23 +21,23 @@ const newTutorialVideoSchema = new Schema({
     school: {
         type: String,
     },
-    cost: {
-        type: Number,
-    },
-    thumbnailLink: {
+    program: {
         type: String,
     },
-    videoLink: {
+    year: {
         type: String,
     },
-    rating: {
+    numberOfVideos: {
         type: Number,
     },
-    sales: {
+    numberOfServices: {
         type: Number,
     },
+    profilePhotoLink: {
+        type: String,
+    }
 });
 
-const newTutorialVideoModel = db.model('New_Tutorial_Videos', newTutorialVideoSchema);
+const studentModel = db.model('students', studentSchema);
 
-module.exports = newTutorialVideoModel;
+module.exports = studentModel;

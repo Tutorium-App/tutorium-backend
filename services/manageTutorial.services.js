@@ -2,7 +2,7 @@ const TutorialService = require('../models/tutorialService.model');
 const TutorialVideo = require('../models/tutorialVideo.model');
 const PendingTutorial = require('../models/pendingTutorials.model');
 const EmailServices = require('../services/email.services');
-const tutorModel = require('../models/tutor.model');
+const tutorModel = require('../models/student.model');
 
 class ManageTutorialServices {
     // Fetch all tutorial services for a specific tutor

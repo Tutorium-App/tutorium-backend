@@ -1,4 +1,4 @@
-const tutorModel = require('../models/tutor.model');
+const tutorModel = require('../models/student.model');
 const newTutorialVideo = require('../models/newTutorialVideo.model');
 const newTutorialService = require('../models/newTutorialService.model');
 

@@ -1,4 +1,4 @@
-const tutorModel = require('../models/tutor.model');// Ensure this points to wherever your Tutor model is defined
+const tutorModel = require('../models/student.model');// Ensure this points to wherever your Tutor model is defined
 
 class ProfileServices {
     static async editProfileDetails(tutorID, fullName, email, phone, program, year, about) {
