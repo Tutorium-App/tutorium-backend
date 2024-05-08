@@ -7,7 +7,7 @@ const paymentController = require('../controllers/payment.controller');
 router.get('/fetchPayments', paymentController.fetchPayments); 
 
 
-// fetch all payments
+// make payment
 router.post('/makePayment', paymentController.makePayment); 
 
 module.exports = router;

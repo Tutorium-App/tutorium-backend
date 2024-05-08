@@ -2,11 +2,8 @@ const router = require('express').Router();
 
 const tutorialRequestController = require('../controllers/tutorialRequest.controller');
 
-// Read tutorial requests
-router.get('/readTutorialRequests', tutorialRequestController.readTutorialRequests);
-
-// Accept tutorial request
-router.post('/acceptTutorialRequest', tutorialRequestController.acceptTutorialRequest);
+// fetch accepted requests
+router.get('/fetchAcceptedRequests', tutorialRequestController.fetchAcceptedRequests);
 
 module.exports = router;
 

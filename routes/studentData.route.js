@@ -1,17 +1,13 @@
 const router = require('express').Router();
 
-const homeScreenDataController = require('../controllers/homeScreenData.controller');
+const studentDataController = require('../controllers/studentData.controller');
 
 
-// Read home screen data
-router.get('/homeScreenData', homeScreenDataController.fetchHomeScreenData);
+// fetch student data
+router.get('/studentData', studentDataController.fetchstudentData);
 
-//upload tutorial video
-router.post('/uploadTutorialVideo', homeScreenDataController.uploadTutorialVideo);
-
-//upload tutorial service
-router.post('/uploadTutorialService', homeScreenDataController.uploadTutorialService);
- 
+// edit student data
+router.get('/editStudentData', studentDataController.editStudentData); 
 
 module.exports = router;
 
