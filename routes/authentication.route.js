@@ -4,7 +4,7 @@ const authenticationController = require('../controllers/authentication.controll
 
 
 //creating a user
-router.post('/storeTutorData', authenticationController.storeTutorData);
+router.post('/storeStudentData', authenticationController.storeStudentData);
 
 
 //delete account
