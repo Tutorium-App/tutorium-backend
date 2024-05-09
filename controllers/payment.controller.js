@@ -2,12 +2,12 @@ const PaymentServices = require('../services/payment.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 
-// Function to fetch tutors pending payment from the database
+// Function to fetch all pending payments from the database
 exports.fetchPayments = async (req, res, next) => {
     try {
-        const { tutorID } = req.body;
+        const { studentID } = req.body;
 
-        const payments = await PaymentServices.fetchPayments(tutorID);
+        const payments = await PaymentServices.fetchPayments(studentID);
 
         if (!payments) {
             return sendErrorResponse(res, 500, 'Error fetching payment details');
@@ -18,3 +18,40 @@ exports.fetchPayments = async (req, res, next) => {
         next(error);
     } 
 }; 
+
+// Function to make payment to the Tutorium account
+exports.makePayment = async (req, res, next) => {
+    try {
+        const { amount, studentNumber } = req.body;
+
+        const payment = await PaymentServices.makePayment(amount, studentNumber);
+
+        if (!payment) {
+            return sendErrorResponse(res, 500, 'Error making payment');
+        }
+
+        res.json({ status: true, success: payment });
+    } catch (error) {
+        next(error);
+    } 
+}; 
+
+// Function to pay tutor
+exports.payTutor = async (req, res, next) => {
+    try {
+        const { amount, studentNumber } = req.body;
+
+        const payment = await PaymentServices.payTutor(amount, studentNumber);
+
+        if (!payment) {
+            return sendErrorResponse(res, 500, 'Error making payment');
+        }
+
+        res.json({ status: true, success: payment });
+    } catch (error) {
+        next(error);
+    } 
+}; 
+
+//todo will come back to this
+ 

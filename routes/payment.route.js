@@ -7,8 +7,11 @@ const paymentController = require('../controllers/payment.controller');
 router.get('/fetchPayments', paymentController.fetchPayments); 
 
 
-// make payment
-router.post('/makePayment', paymentController.makePayment); 
+// make payment to the Tutorium account
+router.post('/makePayment', paymentController.makePayment);
+
+// make payment to a tutor
+router.post('/payTutor', paymentController.payTutor);
 
 module.exports = router;
 

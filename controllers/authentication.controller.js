@@ -2,17 +2,17 @@ const AuthenticationServices = require('../services/authentication.services');
 const EmailServices = require('../services/email.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
-// Function to get tutor authentication data and store it
-exports.storeTutorData = async (req, res, next) => {
+// Function to store students data
+exports.storeStudentData = async (req, res, next) => {
     try {
-        const { tutorID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink } = req.body;
+        const { studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink } = req.body;
         
-        // Attempt to store tutor data
-        let tutorData = await AuthenticationServices.storeTutorData(tutorID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink);
+        // Attempt to store student data
+        let studentData = await AuthenticationServices.storeStudentData(studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink);
 
         // Check if data was stored successfully
-        if (!tutorData) {
-            return sendErrorResponse(res, 500, 'Error saving tutor details');
+        if (!studentData) {
+            return sendErrorResponse(res, 500, 'Error saving student details');
         }
 
         // Define the congratulations email content
@@ -26,33 +26,33 @@ exports.storeTutorData = async (req, res, next) => {
         const subject = "Congratulations! You're a Tutorium Tutor";
 
         // Attempt to send the email
-        let tutorEmail = await EmailServices.sendEmail(email, fullName, subject, message);
+        let studentEmail = await EmailServices.sendEmail(email, fullName, subject, message);
 
         // Handle email send failure
-        if (!tutorEmail) {
+        if (!studentEmail) {
             return sendErrorResponse(res, 500, 'Error sending email');
         }
 
         // Send successful response
-        res.json({ status: true, success: tutorData });
+        res.json({ status: true, success: studentData });
 
     } catch (error) {
         next(error); // Pass any exceptions to the next error handling middleware
     }
 }
 
-// function to delete account using tutor id
+// function to delete account using student id
 exports.deleteAccount = async (req, res, next)=>{
     try {
-        const {tutorID} = req.body;
+        const {studentID} = req.body;
         
-        let tutorData = await AuthenticationServices.deleteAccount(tutorID);
+        let studentData = await AuthenticationServices.deleteAccount(studentID);
 
-        if (!tutorData) {
-            return sendErrorResponse(res, 500, 'Error deleting tutor account');
+        if (!studentData) {
+            return sendErrorResponse(res, 500, 'Error deleting student account');
         }
 
-        res.json({status: true, success: tutorData});
+        res.json({status: true, success: studentData});
     } catch (error) {
         next(error);
     }

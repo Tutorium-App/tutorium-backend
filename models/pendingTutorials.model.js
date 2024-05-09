@@ -18,6 +18,9 @@ const pendingTutorialSchema = new Schema({
     studentEmail: {
         type: String,
     },
+    tutorEmail: {
+        type: String,
+    },
     tutorialTitle: {
         type: String,
     },
