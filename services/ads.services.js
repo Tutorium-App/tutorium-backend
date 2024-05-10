@@ -1,21 +1,33 @@
 const adsModel = require('../models/ads.model');
 
 class AdsServices {
-    //function to store student data into database
+    // Load ads from the database based on the school
     static async loadAds(school) {
-
-        const tutorData = new adsModel({find});
-        return await tutorData.save();
+        try {
+            const ads = await adsModel.find({ school: school });
+            return ads;
+        } catch (error) {
+            console.error("Error retrieving ads from database:", error);
+            throw error; // Re-throw the error to be handled by the controller
+        }
     }
 
-    //function to increase ads count click
+    // Count and update the click count for a specific ad
     static async countClick(adsID) {
+        try {
+            const ad = await adsModel.findById(adsID);
+            if (!ad) {
+                return null;
+            }
 
-        const tutorData = new adsModel({find});
-        return await tutorData.save();
+            ad.clickCount += 1; // Increment the click count
+            await ad.save();
+            return ad.clickCount; // Return the updated click count
+        } catch (error) {
+            console.error("Error updating click count:", error);
+            throw error; // Re-throw the error to be handled by the controller
+        }
     }
-
 }
 
 module.exports = AdsServices;
-
