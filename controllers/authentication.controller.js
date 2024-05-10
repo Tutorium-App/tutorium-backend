@@ -15,15 +15,16 @@ exports.storeStudentData = async (req, res, next) => {
             return sendErrorResponse(res, 500, 'Error saving student details');
         }
 
-        // Define the congratulations email content
+        // Define the congratulations email content 
         const message = `Dear ${fullName},\n\n
-        Congratulations on joining Tutorium! We're thrilled to have you aboard our community of passionate and dedicated tutors. At Tutorium, we believe in the power of education and the difference it can make in a student's life. As a tutor on our platform, you'll have the opportunity to share your knowledge, connect with fellow students, and earn money while you do it.\n\n
-        We're committed to providing you with all the support you need to succeed. We look forward to seeing the impact you'll make. If you have any questions or need assistance, feel free to reach out to our support team.\n\n
-        Welcome to Tutorium, where learning meets passion and opportunity.\n\n
-        Warm regards,\n
+        Welcome to Tutorium! We are delighted to have you join our vibrant community of learners and educators. At Tutorium, we are dedicated to empowering students like you to achieve academic excellence and personal growth through our tailored tutoring services.\n\n
+        As a member of Tutorium, you will have access to a wide range of resources and experienced tutors to help you succeed in your studies. Whether you need help with specific courses, preparing for tests or exams, or even learning a new skill, our tutors are here to assist you every step of the way.\n\n
+        Feel free to explore our platform and take advantage of the various tools and features available to enhance your learning experience. If you have any questions or need support, our customer service team is always ready to help.\n\n
+        Thank you for choosing Tutorium. We are excited to be a part of your educational journey and look forward to helping you reach your full potential.\n\n
+        Best wishes,\n
         The Tutorium Team`;
 
-        const subject = "Congratulations! You're a Tutorium Tutor";
+        const subject = "Welcome to Tutorium!!!";
 
         // Attempt to send the email
         let studentEmail = await EmailServices.sendEmail(email, fullName, subject, message);

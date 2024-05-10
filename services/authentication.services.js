@@ -1,4 +1,4 @@
-const tutorModel = require('../models/student.model');
+const studentModel = require('../models/student.model');
 const paymentModel = require('../models/payment.model');
 const pendingTutorialModel = require('../models/pendingTutorials.model');
 const reviewModel = require('../models/reviews.model');
@@ -12,16 +12,12 @@ const mongoose = require('mongoose');
 
 
 class AuthenticationServices {
-    //function to store tutor data into database
-    static async storeTutorData(tutorID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink) {
-        var verified = "false";
-        var rating = 1;
-        var balance = 0;
+    //function to store student data into database
+    static async storeStudentData(studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink) {
         var numberOfServices = 0;
         var numberOfVideos = 0;
-        var about = "";
 
-        const tutorData = new tutorModel({ tutorID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink, verified, rating, balance, about, numberOfVideos, numberOfServices });
+        const tutorData = new tutorModel({ studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink, numberOfServices, numberOfVideos });
         return await tutorData.save();
     }
 
