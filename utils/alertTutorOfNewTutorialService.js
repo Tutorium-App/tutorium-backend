@@ -1,10 +1,10 @@
 const EmailServices = require('../services/email.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
-async function alertTutorService(tutorName, tutorEmail, studentName, studentEmail, studentNumber, tutorialTitle, cost ) {
+async function alertTutorService(tutorName, tutorEmail, studentName, studentEmail, studentNumber, tutorialTitle, amount) {
     
     const message = `Dear ${tutorName},\n\n
-    We are happy to inform you that your tutorial service titled: "${tutorialTitle}" has been booked by a student from your campus at GHS${cost}.\n\n
+    We are happy to inform you that your tutorial service titled: "${tutorialTitle}" has been booked by a student from your campus at GHS${amount}.\n\n
     This amount will be processed and transfered into your Mobile Money account after the completion of this service. Have in mind that service fees would be deducted. \n\n
     \n\n
     Student Details\n\
@@ -27,4 +27,4 @@ async function alertTutorService(tutorName, tutorEmail, studentName, studentEmai
 
 }
 
-module.exports = { alertTutor };
+module.exports = { alertTutorService };
