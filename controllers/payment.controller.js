@@ -22,9 +22,9 @@ exports.fetchPayments = async (req, res, next) => {
 // Function to make payment to the Tutorium account
 exports.makePayment = async (req, res, next) => {
     try {
-        const { amount, studentNumber } = req.body;
+        const { amount, studentNumber, studentEmail } = req.body;
 
-        const payment = await PaymentServices.makePayment(amount, studentNumber);
+        const payment = await PaymentServices.makePayment(amount, studentNumber, studentEmail);
 
         if (!payment) {
             return sendErrorResponse(res, 500, 'Error making payment');
@@ -39,9 +39,9 @@ exports.makePayment = async (req, res, next) => {
 // Function to pay tutor
 exports.payTutor = async (req, res, next) => {
     try {
-        const { amount, studentNumber } = req.body;
+        const { amount, tutorNumber, tutorEmail } = req.body;
 
-        const payment = await PaymentServices.payTutor(amount, studentNumber);
+        const payment = await PaymentServices.payTutor(amount, tutorNumber, tutorEmail);
 
         if (!payment) {
             return sendErrorResponse(res, 500, 'Error making payment');

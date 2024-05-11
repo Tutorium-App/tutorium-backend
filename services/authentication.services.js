@@ -1,15 +1,9 @@
 const studentModel = require('../models/student.model');
 const paymentModel = require('../models/payment.model');
 const pendingTutorialModel = require('../models/pendingTutorials.model');
-const reviewModel = require('../models/reviews.model');
 const tutorialRequestModel = require('../models/tutorialRequest.model');
-const tutorialServiceModel = require('../models/tutorialService.model');
-const tutorialVideoModel = require('../models/tutorialVideo.model');
 
 const connection = require('../config/db');
-
-const mongoose = require('mongoose');
-
 
 class AuthenticationServices {
     //function to store student data into database
@@ -17,13 +11,13 @@ class AuthenticationServices {
         var numberOfServices = 0;
         var numberOfVideos = 0;
 
-        const tutorData = new tutorModel({ studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink, numberOfServices, numberOfVideos });
+        const tutorData = new studentModel({ studentID, fullName, email, phone, dateCreated, school, program, year, profilePhotoLink, numberOfServices, numberOfVideos });
         return await tutorData.save();
     }
 
 
     //function to delete user account from the database
-    static async deleteAccount(tutorID) {
+    static async deleteAccount(studentID) {
         let session = null;
         try {
             // Start a session and transaction for atomic operations
@@ -33,20 +27,14 @@ class AuthenticationServices {
             console.log("Transaction started");
 
             // Delete tutor in all related collections
-            await tutorModel.deleteOne({ tutorID: tutorID }, { session });
-            console.log("Deleted tutor data");
-            await paymentModel.deleteMany({ tutorID: tutorID }, { session });
+            await studentModel.deleteOne({ studentID: studentID }, { session });
+            console.log("Deleted student data");
+            await paymentModel.deleteMany({ studentID: studentID }, { session });
             console.log("Deleted payment data");
-            await pendingTutorialModel.deleteMany({ tutorID: tutorID }, { session });
+            await pendingTutorialModel.deleteMany({ studentID: studentID }, { session });
             console.log("Deleted pending tutorial data");
-            await reviewModel.deleteMany({ tutorID: tutorID }, { session });
-            console.log("Deleted review data");
-            await tutorialRequestModel.deleteMany({ tutorID: tutorID }, { session });
+            await tutorialRequestModel.deleteMany({ studentID: studentID }, { session });
             console.log("Deleted tutorial request data");
-            await tutorialServiceModel.deleteMany({ tutorID: tutorID }, { session });
-            console.log("Deleted tutorial service data");
-            await tutorialVideoModel.deleteMany({ tutorID: tutorID }, { session });
-            console.log("Deleted tutorial video data");
 
             // Commit the transaction
             console.log("Committing transaction");
