@@ -1,14 +1,24 @@
-const Category = require('../models/category.model');
+const tutorialVideoModel = require('../models/tutorialVideo.model');
+const tutorialServiceModel = require('../models/tutorialService.model');
 
 class CategoriesServices {
     // Function to load category data based on school and category type
     static async load(school, categoryType) {
         try {
-            const categoryData = await Category.find({ school: school, categoryType: categoryType });
-            return categoryData.length > 0 ? categoryData : null;
+            // Fetch tutorial videos based on school
+            const tutorialVideos = await tutorialVideoModel.find({ school: school, category: categoryType });
+
+            // Fetch tutorial services based on school
+            const tutorialServices = await tutorialServiceModel.find({ school: school, category: categoryType });
+
+            // Combine tutorial videos and services into one array
+            const combinedData = [...tutorialVideos, ...tutorialServices];
+
+            // Return the combined data
+            return combinedData.length > 0 ? combinedData : null;
         } catch (error) {
-            console.error('Error fetching category data:', error);
-            throw error;  // Allow the controller to handle the error
+            console.error('Error searching data:', error);
+            return null;
         }
     }
 }
