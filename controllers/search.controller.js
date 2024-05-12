@@ -1,4 +1,4 @@
-const SearchServices = require('../services/review.services');
+const SearchServices = require('../services/search.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Function to fetch all tutorial services and videos
