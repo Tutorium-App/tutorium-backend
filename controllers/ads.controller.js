@@ -11,7 +11,7 @@ exports.loadAds = async (req, res, next)=>{
         let adsData = await AdsServices.loadAds(school);
 
         if (!adsData) {
-            return sendErrorResponse(res, 500, 'Error deleting stduent account');
+            return sendErrorResponse(res, 404, 'No ads data found for the specified school.');
         }
 
         res.json({status: true, success: adsData});

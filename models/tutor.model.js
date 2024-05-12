@@ -45,6 +45,9 @@ const tutorSchema = new Schema({
     rank: {
         type: Number,
     },
+    sales: {
+        type: Number,
+    },
     verified: {
         type: String,
     },

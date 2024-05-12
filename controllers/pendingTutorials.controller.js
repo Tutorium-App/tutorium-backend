@@ -1,4 +1,4 @@
-const PendingTutorialServices = require('../services/pedingTutorials.services');
+const PendingTutorialServices = require('../services/pendingTutorials.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 
@@ -16,15 +16,32 @@ exports.fetchPendingTutorials = async (req, res, next) => {
         res.json({ status: true, success: data });
     } catch (error) {
         next(error);
+    }  
+}; 
+
+// Function to create a pending tutorial service
+exports.createPendingTutorial = async (req, res, next) => {
+    try {
+        const { tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber } = req.body;
+
+        const data = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber);
+
+        if (!data) {
+            return sendErrorResponse(res, 500, 'Error createing pending tutorial');
+        }
+
+        res.json({ status: true, success: data });
+    } catch (error) {
+        next(error);
     } 
 }; 
 
 // Function to request a refund
 exports.requestRefund = async (req, res, next) => {
     try {
-        const { requestID, tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, requestReason, cost, tutorNumber, studentNumber } = req.body;
+        const { tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber } = req.body;
 
-        const data = await PendingTutorialServices.requestRefund(requestID, tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, requestReason, cost, tutorNumber, studentNumber);
+        const data = await PendingTutorialServices.requestRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber);
 
         if (!data) {
             return sendErrorResponse(res, 500, 'Error sending refund request');
@@ -40,9 +57,9 @@ exports.requestRefund = async (req, res, next) => {
 // Function to request a refund
 exports.approveRefund = async (req, res, next) => {
     try {
-        const { requestID, tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, requestReason, cost, tutorNumber, studentNumber } = req.body;
+        const { tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber } = req.body;
 
-        const data = await PendingTutorialServices.approveRefund(requestID, tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, requestReason, cost, tutorNumber, studentNumber);
+        const data = await PendingTutorialServices.approveRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber);
 
         if (!data) {
             return sendErrorResponse(res, 500, 'Error approving refund request');

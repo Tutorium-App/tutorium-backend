@@ -1,49 +1,93 @@
-const pendingTutorialModel = require('../models/pendingTutorial.model');
+const pendingTutorialModel = require('../models/pendingTutorials.model');
 
 class PendingTutorialServices {
-    // Fetch all pending tutorials for a given student ID
+
+    //function to create new pending tutorial service
+    static async createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber) {
+
+        const pendingTutorial = new pendingTutorialModel({ tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber });
+        return await pendingTutorial.save();
+    }
+
+    // fetch all pending tutorial service
     static async fetchPendingTutorials(studentID) {
         try {
-            const tutorials = await pendingTutorialModel.find({ studentID: studentID });
-            return tutorials;
+            const data = await pendingTutorialModel.find({ studentID: studentID });
+            return data;
         } catch (error) {
-            console.error("Error fetching pending tutorials:", error);
+            console.error("Error retrieving pending tutorial services from database:", error);
             throw error; // Re-throw the error to be handled by the controller
         }
     }
 
-    // Request a refund for a tutorial
-    static async requestRefund(requestID, tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, requestReason, cost, tutorNumber, studentNumber) {
+    // function to send an email to admin for a refund
+    static async requestRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber) {
         try {
-            // Create a new refund request
-            const refundRequest = new pendingTutorialModel({
-                tutorID, tutorName, studentID, studentName, tutorEmail, studentEmail, tutorialTitle, cost, tutorNumber, studentNumber
-            });
-            // Add a reason and request ID to handle it separately if needed
-            refundRequest.requestReason = requestReason;
-            refundRequest.requestID = requestID;
 
-            await refundRequest.save();
-            return refundRequest;
+            const message = `
+            Dear Tutorium Admin,\n\n
+            A refund has been requested by a student for the following tutorial:\n\n
+            Tutorial Title: ${tutorialTitle}\n
+            Tutorial ID: ${tutorialID}\n
+            Cost: ${cost}\n\n
+            Student Details:\n
+            Name: ${studentName}\n
+            Email: ${studentEmail}\n
+            Number: ${studentNumber}\n
+            Active Number: ${activeNumber}\n
+            Reason: ${reason}\n\n
+            Tutor Details:\n
+            Name: ${tutorName}\n
+            Email: ${tutorEmail}\n
+            Number: ${tutorNumber}\n\n
+            Please review this refund request and take appropriate action.\n\n
+            Best regards,\n
+            Tutorium Team`;
+
+            const subject = `Refund Request: ${tutorialTitle}`;
+            const email = "buabassahlawson01@gmail.com"; //todo: admin email goes here
+            const name = "Tutorium Admin"
+
+            // Attempt to send the email
+            let requestRefundMail = await EmailServices.sendEmail(email, name, subject, message);
+
+            // Handle email send failure
+            if (!requestRefundMail) {
+                return sendErrorResponse(res, 500, 'Error sending email');
+            }
+
         } catch (error) {
-            console.error("Error sending refund request:", error);
-            throw error;
+            console.error("Error requesting refund:", error);
+            throw error; // Re-throw the error to be handled by the controller
         }
     }
 
-    // Approve a refund
-    static async approveRefund(requestID) {
+    // function to approve refund
+    static async approveRefund(tutorialID, tutorName, tutorEmail, tutorialTitle) {
         try {
-            const refundApproval = await pendingTutorialModel.findByIdAndUpdate(
-                requestID,
-                { approved: true }, // Assuming there is an 'approved' field to track this
-                { new: true }
-            );
-            return refundApproval;
+            const message = `
+            Dear ${tutorName},\n\n
+            We regret to inform you that the tutorial service "${tutorialTitle}" has been cancelled due to a refund request by the student.\n
+            If you have any questions or concerns, please feel free to contact us.\n\n
+            Best regards,\n
+            Tutorium Team`;
+
+            const subject = `Tutorial Service Cancellation: ${tutorialTitle}`;
+
+            // Attempt to send the email
+            await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
+
+            // Delete pendingTutorial by its ID
+            await pendingTutorialModel.findByIdAndDelete(tutorialID);
+
+            // Email sent successfully
+            console.log("Cancellation email sent to tutor successfully.");
         } catch (error) {
-            console.error("Error approving refund request:", error);
+            console.error('Error sending cancellation email:', error);
             throw error;
         }
     }
 }
+
+module.exports = PendingTutorialServices;
 
