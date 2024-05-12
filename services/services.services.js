@@ -1,25 +1,38 @@
-const tutorialVideoModel = require('../models/tutorialVideo.model');
 const tutorialServiceModel = require('../models/tutorialService.model');
 
-class SearchServices {
-    static async fetchAllTutorials(school) {
+class ServicesServices {
+    // Fetch all tutorial services for a given school
+    static async fetchAllServices(school) {
         try {
-            // Fetch tutorial videos based on school
-            const tutorialVideos = await tutorialVideoModel.find({ school: school });
-
-            // Fetch tutorial services based on school
-            const tutorialServices = await tutorialServiceModel.find({ school: school });
-
-            // Combine tutorial videos and services into one array
-            const combinedData = [...tutorialVideos, ...tutorialServices];
-
-            // Return the combined data
-            return combinedData;
+            const services = await tutorialServiceModel.find({ school: school });
+            return services;
         } catch (error) {
-            console.error('Error searching data:', error);
-            return null;
+            console.error("Error fetching all tutorial services:", error);
+            throw error; // Re-throw the error to be handled by the controller
+        }
+    }
+
+    // Fetch popular tutorial services for a given school
+    static async fetchPopularServices(school) {
+        try {
+            const popularServices = await tutorialServiceModel.find({ school: school }).sort({ sales: -1 });
+            return popularServices;
+        } catch (error) {
+            console.error("Error fetching popular tutorial services:", error);
+            throw error;
+        }
+    }
+
+    // Fetch tutorial services by tutor ID
+    static async fetchTutorServices(tutorID) {
+        try {
+            const services = await tutorialServiceModel.find({ tutorID: tutorID });
+            return services;
+        } catch (error) {
+            console.error("Error fetching tutorial services by tutor ID:", error);
+            throw error;
         }
     }
 }
 
-module.exports = SearchServices;
+module.exports = ServicesServices;

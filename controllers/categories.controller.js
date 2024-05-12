@@ -1,54 +1,34 @@
 const CategoriesServices = require('../services/categories.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
-
-// function to fetch academics category
-exports.fetchAcademics = async (req, res, next)=>{
+// Common function to handle the fetching of categories
+async function fetchCategory(req, res, categoryType) {
     try {
-        const {school} = req.body;
-        
-        let data = await CategoriesServices.load(school);
+        const { school } = req.body;
+
+        let data = await CategoriesServices.load(school, categoryType);
 
         if (!data) {
-            return sendErrorResponse(res, 500, 'Error fetching academics data');
+            return sendErrorResponse(res, 500, `Error fetching ${categoryType} data`);
         }
 
-        res.json({status: true, success: data});
+        res.json({ status: true, success: data });
     } catch (error) {
         next(error);
     }
 }
 
-// function to fetch skills category
-exports.fetchSkills = async (req, res, next)=>{
-    try {
-        const {school} = req.body;
-        
-        let data = await CategoriesServices.load(school);
-
-        if (!data) {
-            return sendErrorResponse(res, 500, 'Error fetching skills data');
-        }
-
-        res.json({status: true, success: data});
-    } catch (error) {
-        next(error);
-    }
+// Function to fetch academics category
+exports.fetchAcademics = (req, res, next) => {
+    fetchCategory(req, res, 'academics');
 }
 
-// function to fetch others category
-exports.fetchOthers = async (req, res, next)=>{
-    try {
-        const {school} = req.body;
-        
-        let data = await CategoriesServices.load(school);
+// Function to fetch skills category
+exports.fetchSkills = (req, res, next) => {
+    fetchCategory(req, res, 'skills');
+}
 
-        if (!data) {
-            return sendErrorResponse(res, 500, 'Error fetching others data');
-        }
-
-        res.json({status: true, success: data});
-    } catch (error) {
-        next(error);
-    }
+// Function to fetch others category
+exports.fetchOthers = (req, res, next) => {
+    fetchCategory(req, res, 'others');
 }
