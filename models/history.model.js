@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const db = require('../config/db');
 const { Schema } = mongoose;
 
-const tutorialServiceSchema = new Schema({
+const historySchema = new Schema({
     tutorID: {
+        type: String,
+    },
+    tutorName: {
         type: String,
     },
     studentID: {
@@ -18,7 +21,7 @@ const tutorialServiceSchema = new Schema({
     description: {
         type: String,
     },
-    dateCreated: {
+    dateEnded: {
         type: String,
     },
     cost: {
@@ -26,6 +29,6 @@ const tutorialServiceSchema = new Schema({
     }
 });
 
-const tutorialServiceModel = db.model('TutorialServices', tutorialServiceSchema);
+const historyModel = db.model('history', historySchema);
 
-module.exports = tutorialServiceModel;
+module.exports = historyModel;

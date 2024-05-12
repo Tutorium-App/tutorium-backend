@@ -1,4 +1,5 @@
 const PendingTutorialServices = require('../services/pendingTutorials.services');
+const HistoryServices = require('./history.services');
 const pendingTutorialsModel = require('../models/pendingTutorials.model');
 const tutorialServiceModel = require('../models/tutorialService.model');
 const tutorialVideoModel = require('../models/tutorialVideo.model');
@@ -85,7 +86,7 @@ class PaymentServices {
 
 
     // function to pay tutor after student has tutorial is complete
-    static async payTutor(amount, tutorNumber, tutorEmail, studentID) {
+    static async payTutor(tutorialID, amount, tutorNumber, tutorEmail, studentID) {
         const provider = getMobileProvider(tutorNumber);
         try {
             return new Promise((resolve, reject) => {
@@ -105,6 +106,7 @@ class PaymentServices {
                         const student = await studentModel.find({studentID: studentID});
                         student.numberOfServices++;
                         await student.save();
+                        const history = await HistoryServices.createHistory(tutorialID);
                         resolve(body);
                     }
                 });

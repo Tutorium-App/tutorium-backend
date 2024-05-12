@@ -15,12 +15,14 @@ class VideosServices {
     // Fetch popular tutorial videos for a given school
     static async fetchPopularVideos(school) {
         try {
-            // Assuming popularity is determined by the number of sales
-            const popularVideos = await tutorialVideoModel.find({ school: school }).sort({ sales: -1 });
+            const popularVideos = await tutorialVideoModel
+                .find({ school: school })
+                .sort({ sales: -1 })
+                .limit(5); // Limit the results to top 5 videos
             return popularVideos;
         } catch (error) {
             console.error("Error fetching popular tutorial videos:", error);
-            throw error; // Re-throw the error to be handled by the controller
+            throw error;
         }
     }
 

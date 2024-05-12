@@ -15,7 +15,10 @@ class ServicesServices {
     // Fetch popular tutorial services for a given school
     static async fetchPopularServices(school) {
         try {
-            const popularServices = await tutorialServiceModel.find({ school: school }).sort({ sales: -1 });
+            const popularServices = await tutorialServiceModel
+                .find({ school: school })
+                .sort({ sales: -1 })
+                .limit(5); // Limit the results to top 5 services
             return popularServices;
         } catch (error) {
             console.error("Error fetching popular tutorial services:", error);

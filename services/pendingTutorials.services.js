@@ -87,6 +87,18 @@ class PendingTutorialServices {
             throw error;
         }
     }
+
+    //function to delete pending tutorial service
+    static async deletePendingTutorial(tutorialID) {
+        try {
+          const pendingTutorialDocument = await pendingTutorialModel.findByIdAndDelete(tutorialID);
+          return !!pendingTutorialDocument; // Return true if deleted, false otherwise
+        } catch (error) {
+          console.error('Error deleting pending tutorial:', error);
+          // Handle different error types here (optional)
+          throw error;
+        }
+      }
 }
 
 module.exports = PendingTutorialServices;

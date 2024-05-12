@@ -19,3 +19,19 @@ exports.fetchAllHistory = async (req, res, next)=>{
     }
 }
 
+// Function to create history
+exports.createHistory = async (req, res, next) => {
+    try {
+        const { tutorID, tutorName, studentID, title, category, description, dateEnded, cost } = req.body;
+
+        const history = await HistoryServices.createHistory(tutorID, tutorName, studentID, title, category, description, dateEnded, cost);
+
+        if (!history) {
+            return sendErrorResponse(res, 500, 'Error creating history');
+        }
+
+        res.json({ status: true, success: history });
+    } catch (error) {
+        next(error);
+    }
+};
