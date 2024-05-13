@@ -42,9 +42,6 @@ const tutorSchema = new Schema({
     rating: {
         type: Number,
     },
-    rank: {
-        type: Number,
-    },
     sales: {
         type: Number,
     },
