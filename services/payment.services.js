@@ -61,6 +61,7 @@ class PaymentServices {
                             } else {
                                 const video = await tutorialVideoModel.findById(tutorialID);
                                 if (video) {
+                                    payTutorForVideo(amount, tutorNumber, tutorEmail);
                                     video.sales++;
                                     await video.save();
                                     const tutor = await tutorModel.findById(tutorID);
@@ -87,15 +88,16 @@ class PaymentServices {
     }
 
 
-    // function to pay tutor after student has tutorial is complete
+    // function to pay tutor after student has confirmed tutorial is complete
     static async payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
         const provider = getMobileProvider(tutorNumber);
+        var newAmount = amount - (amount * 0.10);
         try {
             const currentDate = new Date();
             return new Promise((resolve, reject) => {
                 Paystack.transaction.initialize({
                     email: tutorEmail,
-                    amount: amount * 100,
+                    amount: newAmount * 100,
                     currency: "GHS",
                     channels: ['mobile_money'],
                     mobile_money: {
@@ -110,6 +112,36 @@ class PaymentServices {
                         student.numberOfServices++;
                         await student.save();
                         const history = await HistoryServices.createHistory(tutorID, tutorName, studentID, title, category, currentDate, amount);
+                        resolve(body);
+                    }
+                });
+            });
+        } catch (error) {
+            console.error('Error paying user:', error);
+            return null;
+        }
+    }
+
+    // function to pay tutor after student has paid for tutorial video
+    static async payTutorForVideo(amount, tutorNumber, tutorEmail) {
+        const provider = getMobileProvider(tutorNumber);
+        var newAmount = amount - (amount * 0.10);
+        try {
+            const currentDate = new Date();
+            return new Promise((resolve, reject) => {
+                Paystack.transaction.initialize({
+                    email: tutorEmail,
+                    amount: newAmount * 100,
+                    currency: "GHS",
+                    channels: ['mobile_money'],
+                    mobile_money: {
+                        phone: tutorNumber,
+                        provider: provider
+                    }
+                }, async function (error, body) {
+                    if (error) {
+                        reject(error);
+                    } else {
                         resolve(body);
                     }
                 });

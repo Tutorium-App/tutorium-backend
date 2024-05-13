@@ -4,7 +4,7 @@ const studentDataController = require('../controllers/studentData.controller');
 
 
 // fetch student data
-router.get('/studentData', studentDataController.fetchstudentData);
+router.get('/studentData', studentDataController.studentData);
 
 // edit student data
 router.get('/editStudentData', studentDataController.editStudentData); 
