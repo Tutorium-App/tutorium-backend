@@ -9,6 +9,7 @@ const { getMobileProvider } = require('../utils/providerFinder');
 const { alertTutorService } = require('../utils/alertTutorOfNewTutorialService');
 const { alertTutorVideo } = require('../utils/alertTutorOfNewTutorialVideo');
 const { generateRandomCode } = require('../utils/qrCodeGenerator');
+const BoughtVideoServices = require('./boughtVideo.services');
 
 require('dotenv').config();
 const Paystack = require('paystack')(process.env.secretKey);
@@ -69,6 +70,7 @@ class PaymentServices {
                                     student.numberOfVideos++;
                                     await student.save();
                                     alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount);
+                                    const boughtVideo = await BoughtVideoServices.createBoughtVideo(tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, video.category, video.description, video.dateCreated, video.school, video.cost, video.thumbnailLink, video.videoLink);
                                 }
                             }
                             resolve(body);
@@ -86,9 +88,10 @@ class PaymentServices {
 
 
     // function to pay tutor after student has tutorial is complete
-    static async payTutor(tutorialID, amount, tutorNumber, tutorEmail, studentID) {
+    static async payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
         const provider = getMobileProvider(tutorNumber);
         try {
+            const currentDate = new Date();
             return new Promise((resolve, reject) => {
                 Paystack.transaction.initialize({
                     email: tutorEmail,
@@ -106,7 +109,7 @@ class PaymentServices {
                         const student = await studentModel.find({studentID: studentID});
                         student.numberOfServices++;
                         await student.save();
-                        const history = await HistoryServices.createHistory(tutorialID);
+                        const history = await HistoryServices.createHistory(tutorID, tutorName, studentID, title, category, currentDate, amount);
                         resolve(body);
                     }
                 });

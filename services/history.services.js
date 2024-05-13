@@ -14,7 +14,7 @@ class HistoryServices {
 
 
     // Create a new hisory
-    static async createHistory(tutorID, tutorName, studentID, title, category, description, dateEnded, cost) {
+    static async createHistory(tutorID, tutorName, studentID, title, category, dateEnded, cost) {
         try {
             const newHistory = new historyModel({
                 tutorID,

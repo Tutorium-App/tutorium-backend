@@ -13,6 +13,7 @@ const adsRouter = require('./routes/ads.route');
 const requestRouter = require('./routes/tutorialRequests.route');
 const pendingTutorialsRouter = require('./routes/pendingTutorials.route');
 const historyRouter = require('./routes/history.route');
+const boughtVideosRouter = require('./routes/boughtVideos.route');
  
 
 const app = express(); 
@@ -32,6 +33,7 @@ app.use('/ads/', adsRouter);
 app.use('/payment/', paymentRouter);
 app.use('/pending/', pendingTutorialsRouter);
 app.use('/history/', historyRouter);
+app.use('/boughtVideos/', boughtVideosRouter);
 
 
 module.exports = app;
