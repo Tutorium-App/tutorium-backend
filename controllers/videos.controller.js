@@ -1,4 +1,4 @@
-const VideosServices = require('../services/video.services');
+const VideosServices = require('../services/videos.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Function to fetch all tutorial videos
@@ -50,4 +50,4 @@ exports.fetchTutorVideos = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
+}; 

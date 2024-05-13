@@ -1,4 +1,4 @@
-const boughtVideoModel = require('../models/boughtVideo.model');
+const boughtVideoModel = require('../models/boughtVideos.model');
 
 class BoughtVideoServices {
     // Fetch reviews using a tutorID

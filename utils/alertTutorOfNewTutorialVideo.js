@@ -13,10 +13,10 @@ async function alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount) {
     const subject = "New Tutorial Video Purchase!";
 
     // Attempt to send the email
-    let studentEmail = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
+    let Email = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
 
     // Handle email send failure
-    if (!studentEmail) {
+    if (!Email) {
         return sendErrorResponse(res, 500, 'Error sending email');
     }
 

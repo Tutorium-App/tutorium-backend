@@ -18,10 +18,10 @@ async function alertTutorService(tutorName, tutorEmail, studentName, studentEmai
     const subject = "Tutorial Service Booked!";
 
     // Attempt to send the email
-    let studentEmail = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
+    let Email = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
 
     // Handle email send failure
-    if (!studentEmail) {
+    if (!Email) {
         return sendErrorResponse(res, 500, 'Error sending email');
     }
 

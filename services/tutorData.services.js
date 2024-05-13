@@ -1,6 +1,6 @@
 const tutorModel = require('../models/tutor.model');
 
-class TutorServices {
+class TutorDataServices {
     // Fetch tutor data by tutor ID
     static async tutorData(tutorID) {
         try {
@@ -16,4 +16,4 @@ class TutorServices {
     }
 }
 
-module.exports = TutorServices;
+module.exports = TutorDataServices;

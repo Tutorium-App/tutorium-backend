@@ -10,12 +10,6 @@ router.get('/fetchPopularVideos', videosController.fetchPopularVideos);
 // fetch Videos by tutor id
 router.get('/fetchTutorVideos', videosController.fetchTutorVideos);
 
-// add student bought tutorial videos
-router.post('/storeStudentVideo', videosController.storeStudentVideo);
-
-// fetch student's bought videos
-router.get('/fetchStudentVideos', videosController.fetchStudentVideos);
-
 
 module.exports = router;
 

@@ -1,10 +1,10 @@
 const router = require('express').Router();
 
-const tutorDataController = require('../controllers/tutorData.controller');
+const tutorDataController = require('../controllers/tutorsData.controller');
 
 
 // fetch tutor data by id
-router.get('/tutorData', tutorDataController.fetchTutorData);
+router.get('/tutorData', tutorDataController.tutorData);
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const TutorServices = require('../services/tutor.services');
+const TutorDataServices = require('../services/tutorData.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Function to fetch tutor data by ID
@@ -6,7 +6,7 @@ exports.tutorData = async (req, res, next) => {
     try {
         const { tutorID } = req.body;
 
-        const tutor = await TutorServices.tutorData(tutorID);
+        const tutor = await TutorDataServices.tutorData(tutorID);
 
         if (!tutor) {
             return sendErrorResponse(res, 500, 'Error fetching tutorial requests');
