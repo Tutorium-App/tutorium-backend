@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const authenticationRouter = require('./routes/authentication.route');
@@ -15,6 +17,7 @@ const pendingTutorialsRouter = require('./routes/pendingTutorials.route');
 const historyRouter = require('./routes/history.route');
 const boughtVideosRouter = require('./routes/boughtVideos.route');
 const rankRouter = require('./routes/rank.route');
+const callbackRouter = require('./routes/callback.route');
  
 
 const app = express(); 
@@ -36,6 +39,7 @@ app.use('/pending/', pendingTutorialsRouter);
 app.use('/history/', historyRouter);
 app.use('/boughtVideos/', boughtVideosRouter);
 app.use('/rank/', rankRouter);
+app.use('/callback/', callbackRouter);
 
 
 module.exports = app;

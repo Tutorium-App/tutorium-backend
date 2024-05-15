@@ -41,25 +41,28 @@ class ReviewServices {
     // Function to update tutor's rating
     static async updateTutorRating(tutorID, newRating) {
         try {
-            // Find the tutor by ID
-            const tutor = await tutorModel.findOne({ tutorID });
+            const filter = { tutorID };
+            const tutor = await tutorModel.findOne(filter);
 
             if (!tutor) {
                 throw new Error("Tutor not found");
             }
 
-            // Calculate new rating
-            const oldRating = tutor.rating || 0; // default to 0 if no rating exists yet
-            const totalRatings = tutor.numberOfRatings || 0; // default to 0 if no ratings exist yet
+            const oldRating = tutor.rating || 0;
+            const totalRatings = tutor.numberOfRatings || 0;
             const newRatingCount = totalRatings + 1;
             const newAverageRating = (oldRating * totalRatings + newRating) / newRatingCount;
 
-            // Update tutor's rating properties
-            tutor.rating = newAverageRating;
-            tutor.numberOfRatings = newRatingCount;
+            const update = {
+                $inc: { numberOfRatings: 1 },
+                $set: { rating: newAverageRating }
+            };
 
-            // Save tutor object back to the database
-            await tutor.save();
+            const result = await tutorModel.updateOne(filter, update);
+
+            if (result.nModified === 0) {
+                throw new Error("Failed to update tutor rating");
+            }
         } catch (error) {
             console.error("Error updating tutor rating:", error);
             throw error;

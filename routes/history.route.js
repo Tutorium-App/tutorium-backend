@@ -5,7 +5,7 @@ const historyController = require('../controllers/history.controller');
 router.get('/fetchAllHistory', historyController.fetchAllHistory);
 
 // create or add to history
-router.get('/createHistory', historyController.createHistory);
+router.post('/createHistory', historyController.createHistory);
 
 module.exports = router;
 

@@ -13,7 +13,7 @@ const reviewSchema = new Schema({
         type: String,
     },
     studentYear: {
-        type: Number,
+        type: String,
     },
     tutorialTitle: {
         type: String,

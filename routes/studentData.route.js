@@ -7,7 +7,7 @@ const studentDataController = require('../controllers/studentData.controller');
 router.get('/studentData', studentDataController.studentData);
 
 // edit student data
-router.get('/editStudentData', studentDataController.editStudentData); 
+router.post('/editStudentData', studentDataController.editStudentData); 
 
 module.exports = router;
 

@@ -5,10 +5,10 @@ const pendingTutorialsController = require('../controllers/pendingTutorials.cont
 router.get('/fetchPendingTutorials', pendingTutorialsController.fetchPendingTutorials);
 
 // request refund
-router.get('/requestRefund', pendingTutorialsController.requestRefund);
+router.post('/requestRefund', pendingTutorialsController.requestRefund);
 
 // delete pending tutorial service / approve refund
-router.get('/approveRefund', pendingTutorialsController.approveRefund);
+router.post('/approveRefund', pendingTutorialsController.approveRefund);
 
 module.exports = router;
 

@@ -7,7 +7,7 @@ const boughtVideosController = require('../controllers/boughtVideos.controller')
 router.get('/loadBoughtVideos', boughtVideosController.loadBoughtVideos);
 
 // create a bought video
-router.get('/createBoughtVideo', boughtVideosController.createBoughtVideo);
+router.post('/createBoughtVideo', boughtVideosController.createBoughtVideo);
  
 module.exports = router;
 

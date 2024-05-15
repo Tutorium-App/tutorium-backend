@@ -7,7 +7,7 @@ const adsController = require('../controllers/ads.controller');
 router.get('/loadAds', adsController.loadAds);
 
 // count ads click
-router.get('/countClick', adsController.countClick);
+router.post('/countClick', adsController.countClick);
  
 module.exports = router;
 

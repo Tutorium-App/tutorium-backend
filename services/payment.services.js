@@ -1,15 +1,8 @@
-const PendingTutorialServices = require('../services/pendingTutorials.services');
 const HistoryServices = require('./history.services');
 const pendingTutorialsModel = require('../models/pendingTutorials.model');
-const tutorialServiceModel = require('../models/tutorialService.model');
-const tutorialVideoModel = require('../models/tutorialVideo.model');
-const tutorModel = require('../models/tutor.model');
 const studentModel = require('../models/student.model');
 const { getMobileProvider } = require('../utils/providerFinder');
-const { alertTutorService } = require('../utils/alertTutorOfNewTutorialService');
-const { alertTutorVideo } = require('../utils/alertTutorOfNewTutorialVideo');
-const { generateRandomCode } = require('../utils/qrCodeGenerator');
-const BoughtVideoServices = require('./boughtVideo.services');
+
 
 require('dotenv').config();
 const Paystack = require('paystack')(process.env.secretKey);
@@ -47,37 +40,7 @@ class PaymentServices {
                     if (error) {
                         reject(error);
                     } else {
-                        try {
-                            const service = await tutorialServiceModel.findById(tutorialID);
-                            if (service) {
-                                service.sales++;
-                                await service.save();
-                                const tutor = await tutorModel.findById(tutorID);
-                                tutor.sales++;
-                                await tutor.save();
-                                alertTutorService(tutorName, tutorEmail, studentName, studentEmail, studentNumber, tutorialTitle, amount);
-                                const qrCode = generateRandomCode(tutorialID);
-                                const pendingTutorial = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, amount, qrCode, tutorNumber, studentNumber);
-                            } else {
-                                const video = await tutorialVideoModel.findById(tutorialID);
-                                if (video) {
-                                    payTutorForVideo(amount, tutorNumber, tutorEmail);
-                                    video.sales++;
-                                    await video.save();
-                                    const tutor = await tutorModel.findById(tutorID);
-                                    tutor.sales++;
-                                    await tutor.save();
-                                    const student = await studentModel.find({studentID: studentID});
-                                    student.numberOfVideos++;
-                                    await student.save();
-                                    alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount);
-                                    const boughtVideo = await BoughtVideoServices.createBoughtVideo(tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, video.category, video.description, video.dateCreated, video.school, video.cost, video.thumbnailLink, video.videoLink);
-                                }
-                            }
-                            resolve(body);
-                        } catch (err) {
-                            reject(err);
-                        }
+                        resolve(body);
                     }
                 });
             } catch (error) {
@@ -108,7 +71,7 @@ class PaymentServices {
                     if (error) {
                         reject(error);
                     } else {
-                        const student = await studentModel.find({studentID: studentID});
+                        const student = await studentModel.findOne({ studentID: studentID });
                         student.numberOfServices++;
                         await student.save();
                         const history = await HistoryServices.createHistory(tutorID, tutorName, studentID, title, category, currentDate, amount);
