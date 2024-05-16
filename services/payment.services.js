@@ -1,3 +1,4 @@
+require('dotenv').config();
 const HistoryServices = require('./history.services');
 const PaymentDetailsServices = require('./paymentDetails.services');
 const pendingTutorialsModel = require('../models/pendingTutorials.model');
@@ -7,9 +8,7 @@ const { getMobileProvider } = require('../utils/providerFinder');
 const { generateTransferReference } = require('../utils/generateReference');
 const axios = require('axios');
 
-require('dotenv').config();
 const Paystack = require('paystack')(process.env.secretKey);
-const { secretKey } = process.env;
 
 class PaymentServices {
 
@@ -64,18 +63,18 @@ class PaymentServices {
 
 
     static async createTransfer(name, accountNumber, bankCode) {
-        const requestData = {
-            type: "mobile_money",
-            name: name, // recipient's name
-            account_number: accountNumber, // recipient's momo number
-            bank_code: bankCode, // service provider
-            currency: "GHS" 
-        };
-    
         try {
-            const response = await axios.post('https://api.paystack.co/transferrecipient', requestData, {
+            const response = await axios.post('https://api.paystack.co/transferrecipient',
+            {
+                type: "mobile_money",
+                name: name, // recipient's name
+                account_number: accountNumber, // recipient's momo number
+                bank_code: bankCode, // service provider
+                currency: "GHS" 
+            },
+             {
                 headers: {
-                    'Authorization': `Bearer ${secretKey}`,
+                    'Authorization': `Bearer ${process.env.secretKey}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -121,8 +120,9 @@ class PaymentServices {
     static async payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
-        const bankCode = getMobileProvider(tutorNumber);
+        const bankCode = getMobileProvider(tutorNumber).toUpperCase();
         const newAmount = amount - (amount * 0.10);
+
 
         try {
             // Create transfer recipient
