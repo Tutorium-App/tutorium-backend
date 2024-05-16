@@ -23,8 +23,21 @@ exports.fetchPayments = async (req, res, next) => {
 exports.makePayment = async (req, res, next) => {
     try {
         const { tutorialID, tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, amount, studentID, studentName, studentNumber, studentEmail } = req.body;
+        const paymentData = {
+            tutorialID: tutorialID,
+            tutorID: tutorID,
+            tutorName: tutorName,
+            tutorEmail: tutorEmail,
+            tutorNumber: tutorNumber,
+            tutorialTitle: tutorialTitle,
+            amount: amount,
+            studentID: studentID,
+            studentName: studentName,
+            studentNumber: studentNumber,
+            studentEmail: studentEmail
+        };
 
-        const payment = await PaymentServices.makePayment(tutorialID, tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, amount, studentID, studentName, studentNumber, studentEmail);
+        const payment = await PaymentServices.makePayment(paymentData);
 
         if (!payment) {
             return sendErrorResponse(res, 500, 'Error making payment');
@@ -39,9 +52,9 @@ exports.makePayment = async (req, res, next) => {
 // Function to pay tutor
 exports.payTutor = async (req, res, next) => {
     try {
-        const { tutorialID, amount, tutorNumber, tutorEmail, studentID } = req.body;
+        const { tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID } = req.body;
 
-        const payment = await PaymentServices.payTutor(tutorialID, amount, tutorNumber, tutorEmail, studentID);
+        const payment = await PaymentServices.payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID);
 
         if (!payment) {
             return sendErrorResponse(res, 500, 'Error making payment');

@@ -1,12 +1,14 @@
 const PendingTutorialServices = require('../services/pendingTutorials.services');
 const tutorialServiceModel = require('../models/tutorialService.model');
+const paymentDetailsModel = require('../models/paymentDetails.model');
 const tutorialVideoModel = require('../models/tutorialVideo.model');
 const tutorModel = require('../models/tutor.model');
+const studentModel = require('../models/student.model');
 const { alertTutorService } = require('../utils/alertTutorOfNewTutorialService');
 const { alertTutorVideo } = require('../utils/alertTutorOfNewTutorialVideo');
 const { generateRandomCode } = require('../utils/qrCodeGenerator');
-const BoughtVideoServices = require('./boughtVideo.services');
-
+const BoughtVideoServices = require('../services/boughtVideo.services');
+const PaymentServices = require('../services/payment.services');
 
 const crypto = require('crypto');
 
@@ -32,43 +34,71 @@ exports.handlePaystackCallback = async (req, res) => {
             case 'charge.success':
                 // Handle successful payment
                 console.log('Payment was successful');
+
+                // Extract the reference from the payload
+                const reference = payload.data.reference;
+
                 try {
-                    const service = await tutorialServiceModel.findById(tutorialID);
-                    if (service) {
-                        service.sales++;
-                        await service.save();
-                        const tutor = await tutorModel.findOne({ tutorID: tutorID });
-                        tutor.sales++;
-                        await tutor.save();
-                        alertTutorService(tutorName, tutorEmail, studentName, studentEmail, studentNumber, tutorialTitle, amount);
-                        const qrCode = generateRandomCode(tutorialID);
-                        const pendingTutorial = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, amount, qrCode, tutorNumber, studentNumber);
-                    } else {
-                        const video = await tutorialVideoModel.findById(tutorialID);
-                        if (video) {
-                            payTutorForVideo(amount, tutorNumber, tutorEmail);
-                            video.sales++;
-                            await video.save();
-                            const tutor = await tutorModel.findOne({ tutorID: tutorID });
-                            tutor.sales++;
-                            await tutor.save();
-                            const student = await studentModel.findOne({ studentID: studentID });
-                            student.numberOfVideos++;
-                            await student.save();
-                            alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount);
-                            const boughtVideo = await BoughtVideoServices.createBoughtVideo(tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, video.category, video.description, video.dateCreated, video.school, video.cost, video.thumbnailLink, video.videoLink);
+                    // Query the database for payment details using the reference
+                    const paymentDetails = await paymentDetailsModel.findOne({ paymentReference: reference });
+
+                    // Now you have the payment details, you can perform the necessary operations
+                    if (paymentDetails) {
+                        // Perform operations based on payment details
+                        // console.log('Payment details:', paymentDetails);
+
+                        try {
+                            const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
+                            if (service) {
+                                service.sales++;
+                                await service.save();
+                                const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
+                                tutor.sales++;
+                                tutor.balance += paymentDetails.amount;
+                                await tutor.save();
+                                alertTutorService(paymentDetails.tutorName, paymentDetails.tutorEmail, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
+                                const qrCode = generateRandomCode(paymentDetails.tutorialID);
+                                const pendingTutorial = await PendingTutorialServices.createPendingTutorial(paymentDetails.tutorID, paymentDetails.studentID, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.tutorEmail, paymentDetails.tutorialTitle, paymentDetails.amount, qrCode, paymentDetails.tutorNumber, paymentDetails.studentNumber);
+                            } else {
+                                const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
+                                if (video) {
+                                    const payTutor = PaymentServices.payTutorForVideo(paymentDetails.amount, paymentDetails.tutorNumber, paymentDetails.tutorEmail);
+                                    video.sales++;
+                                    await video.save();
+                                    const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
+                                    tutor.sales++;
+                                    await tutor.save();
+                                    const student = await studentModel.findOne({ studentID: paymentDetails.studentID });
+                                    student.numberOfVideos++;
+                                    await student.save();
+                                    alertTutorVideo(paymentDetails.tutorName, paymentDetails.tutorEmail, paymentDetails.tutorialTitle, paymentDetails.amount);
+                                    const boughtVideo = await BoughtVideoServices.createBoughtVideo(paymentDetails.tutorID, paymentDetails.tutorName, paymentDetails.tutorEmail, paymentDetails.tutorNumber, paymentDetails.tutorialTitle, video.category, video.description, video.dateCreated, video.school, video.cost, video.thumbnailLink, video.videoLink);
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Error handling successful payment:', err);
+                            return res.status(500).send('Error handling successful payment');
                         }
+
+                        // Delete the payment detail record from the database after using its data
+                        await paymentDetailsModel.deleteOne({ paymentReference: reference });
+                    } else {
+                        console.error('Payment details not found');
+                        return res.status(404).send('Payment details not found');
                     }
-                    resolve(body);
-                } catch (err) {
-                    reject(err);
+
+                    return res.status(200).send('Payment successful');
+                } catch (error) {
+                    console.error('Error handling successful payment:', error);
+                    return res.status(500).send('Error handling successful payment');
                 }
-                return res.status(200).send('Payment successful');
+
             case 'charge.failure':
                 // Handle failed payment
                 console.log('Payment failed');
                 // Additional logic: Log the failure, notify the user, retry payment, etc.
                 return res.status(500).send('Payment failed');
+
             default:
                 // Unsupported event type
                 console.log(`Unsupported event type: ${event}`);

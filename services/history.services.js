@@ -22,7 +22,6 @@ class HistoryServices {
                 studentID,
                 title,
                 category,
-                description,
                 dateEnded,
                 cost
             });
