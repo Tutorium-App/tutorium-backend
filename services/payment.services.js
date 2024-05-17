@@ -65,20 +65,20 @@ class PaymentServices {
     static async createTransfer(name, accountNumber, bankCode) {
         try {
             const response = await axios.post('https://api.paystack.co/transferrecipient',
-            {
-                type: "mobile_money",
-                name: name, // recipient's name
-                account_number: accountNumber, // recipient's momo number
-                bank_code: bankCode, // service provider
-                currency: "GHS" 
-            },
-             {
-                headers: {
-                    'Authorization': `Bearer ${process.env.secretKey}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-    
+                {
+                    type: "mobile_money",
+                    name: name, // recipient's name
+                    account_number: accountNumber, // recipient's momo number
+                    bank_code: bankCode, // service provider
+                    currency: "GHS"
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.secretKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
             if (response.data.status) {
                 return response.data.data.recipient_code;
             } else {
@@ -88,24 +88,25 @@ class PaymentServices {
             throw error;
         }
     }
-    
+
     static async makeTransfer(amount, recipientCode, reference, reason) {
-        const requestData = {
-            source: "balance",
-            amount: amount,
-            reason: reason,
-            reference: reference,
-            recipient: recipientCode
-        };
-    
+
         try {
-            const response = await axios.post('https://api.paystack.co/transfer', requestData, {
-                headers: {
-                    'Authorization': `Bearer ${secretKey}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-    
+            const response = await axios.post('https://api.paystack.co/transfer',
+                {
+                    source: "balance",
+                    amount: amount * 100,
+                    reason: reason,
+                    reference: reference,
+                    recipient: recipientCode
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.secretKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
             if (response.data.status) {
                 return response.data.data;
             } else {
@@ -122,18 +123,22 @@ class PaymentServices {
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
         const newAmount = amount - (amount * 0.10);
-
+        // console.log(reference);
 
         try {
             // Create transfer recipient
             const recipientCode = await PaymentServices.createTransfer(tutorName, tutorNumber, bankCode);
-            console.log("Recipient code:", recipientCode);
-    
+            // console.log("Recipient code:", recipientCode);
+
             // Make transfer
-            // const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
+            const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
             // console.log("Payment data:", paymentData);
-            
-            // return paymentData;
+
+            if(paymentData){
+                const payTutorDetails = await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, newAmount, category);
+            }
+
+            return paymentData;
         } catch (error) {
             throw error;
         }
@@ -141,30 +146,26 @@ class PaymentServices {
 
 
     // function to pay tutor after student has paid for tutorial video
-    static async payTutorForVideo(amount, tutorNumber, tutorEmail) {
-        const provider = getMobileProvider(tutorNumber);
+    static async payTutorForVideo(amount, tutorNumber, tutorName) {
+        const reason = "Pay Tutorium tutor.";
+        const reference = generateTransferReference();
+        const bankCode = getMobileProvider(tutorNumber).toUpperCase();
         var newAmount = amount - (amount * 0.10);
         try {
-            // Construct the transfer request
-            const transferRequest = {
-                source: "balance",
-                amount: newAmount * 100, // Amount in kobo (minor currency unit)
-                reason: "Payment for tutorial video",
-                reference: "TUTORIUM_PAYMENT_" + Date.now(), // You might want to generate a unique reference for each transfer
-                currency: "GHS",
-                recipient: tutorNumber,
-                metadata: {
-                    email: tutorEmail
-                },
-                // Additional parameters specific to mobile money transfer
-                type: "mobile_money",
-                provider: provider // Mobile money provider (e.g., "MTN", "Vodafone")
-            };
+            // Create transfer recipient
+            const recipientCode = await PaymentServices.createTransfer(tutorName, tutorNumber, bankCode);
+            // console.log("Recipient code:", recipientCode);
 
-            // Initialize the transfer
-            const payment = await Paystack.transfer.create(transferRequest);
+            // Make transfer
+            const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
+            // console.log("Payment data:", paymentData);
 
-            return payment;
+            if(paymentData){
+                const payTutorForVideoDetails = await PaymentDetailsServices.storePayTutorForVideoDetails(reference, recipientCode, tutorName, tutorNumber, newAmount);
+            }
+
+            return paymentData;
+
         } catch (error) {
             console.error('Error paying tutor for video:', error);
             throw error;

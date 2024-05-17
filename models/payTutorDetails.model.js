@@ -6,7 +6,7 @@ const payTutorDetailsSchema = new Schema({
     reference: {
         type: String
     },
-    tutorialID: {
+    recipientCode: {
         type: String
     },
     tutorID: {
@@ -21,15 +21,6 @@ const payTutorDetailsSchema = new Schema({
     studentID: {
         type: String
     },
-    studentName: {
-        type: String
-    },
-    studentNumber: {
-        type: String
-    },
-    studentEmail: {
-        type: String
-    },
     tutorNumber: {
         type: String
     },
@@ -38,9 +29,12 @@ const payTutorDetailsSchema = new Schema({
     },
     amount: {
         type: Number
+    },
+    category: {
+        type: String
     }
 }, {timestamps: true});
 
-const payTutorDetailsModel = db.model('payTutorDetails', payTutorDetailsSchema);
+const paymentTutorDetailsModel = db.model('paymentTutorDetails', payTutorDetailsSchema);
 
-module.exports = payTutorDetailsModel;
+module.exports = paymentTutorDetailsModel;
