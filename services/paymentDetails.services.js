@@ -1,5 +1,5 @@
 const paymentDetailsModel = require('../models/paymentDetails.model');
-const payTutorDetailsModel = require('../models/paymentDetails.model');
+const payTutorDetailsModel = require('../models/payTutorDetails.model');
 const payTutorForVideoModel = require('../models/payTutorForVideo.model');
 
 const connection = require('../config/db');

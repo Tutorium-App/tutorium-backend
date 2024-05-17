@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const db = require('../config/db');
 const { Schema } = mongoose;
 
-const payTutorDetailsSchema = new Schema({
-    reference: {
+const paymentDetailsSchema = new Schema({
+    paymentReference: {
         type: String
     },
     tutorialID: {
@@ -41,6 +41,6 @@ const payTutorDetailsSchema = new Schema({
     }
 }, {timestamps: true});
 
-const payTutorDetailsModel = db.model('payTutorDetails', payTutorDetailsSchema);
+const paymentDetailsModel = db.model('paymentDetails', paymentDetailsSchema);
 
-module.exports = payTutorDetailsModel;
+module.exports = paymentDetailsModel;
