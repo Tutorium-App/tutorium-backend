@@ -16,13 +16,14 @@ exports.storeStudentData = async (req, res, next) => {
         }
 
         // Define the congratulations email content 
-        const message = `Dear ${fullName},\n\n
-        Welcome to Tutorium! We are delighted to have you join our vibrant community of learners and educators. At Tutorium, we are dedicated to empowering students like you to achieve academic excellence and personal growth through our tailored tutoring services.\n\n
-        As a member of Tutorium, you will have access to a wide range of resources and experienced tutors to help you succeed in your studies. Whether you need help with specific courses, preparing for tests or exams, or even learning a new skill, our tutors are here to assist you every step of the way.\n\n
-        Feel free to explore our platform and take advantage of the various tools and features available to enhance your learning experience. If you have any questions or need support, our customer service team is always ready to help.\n\n
+        const message = `Dear ${fullName},\n
+        Welcome to Tutorium! We are delighted to have you join our vibrant community of learners and educators. At Tutorium, we are dedicated to empowering students like you to achieve academic excellence and personal growth through our tailored tutoring services.\n
+        As a member of Tutorium, you will have access to a wide range of resources and experienced tutors to help you succeed in your studies. Whether you need help with specific courses, preparing for tests or exams, or even learning a new skill, our tutors are here to assist you every step of the way.\n
+        Feel free to explore our platform and take advantage of the various tools and features available to enhance your learning experience. If you have any questions or need support, our customer service team is always ready to help.\n
         Thank you for choosing Tutorium. We are excited to be a part of your educational journey and look forward to helping you reach your full potential.\n\n
         Best wishes,\n
-        The Tutorium Team`;
+        The Tutorium Team \n\n
+        [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
         const subject = "Welcome to Tutorium!!!";
 

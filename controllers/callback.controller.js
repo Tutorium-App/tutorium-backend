@@ -107,7 +107,8 @@ exports.handlePaystackCallback = async (req, res) => {
                 We noticed that you attempted to make a payment for a tutorial titled: ${paymentDetails.tutorialTitle}. However, our system did not process your payment. This may have been due to a network interruption or if you canceled the payment yourself.
                 If you're still interested in this tutorial, we encourage you to try making the payment again. If you require any assistance with our platform, please don't hesitate to contact customer service. Thank you for choosing Tutorium.\n\n
                 Regards,
-                The Tutorium Team`;
+                The Tutorium Team \n\n
+                [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
 
                 const subject = "Payment Not Processed!!!";
