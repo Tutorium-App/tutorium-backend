@@ -118,16 +118,25 @@ exports.handlePaystackCallback = async (req, res) => {
             case 'charge.failure':
                 console.log('Payment failed');
 
-                const message = `Dear ${paymentDetails.studentName},
-                We noticed that you attempted to make a payment for a tutorial titled: ${paymentDetails.tutorialTitle}. However, our system did not process your payment. This may have been due to a network interruption or if you canceled the payment yourself.
-                If you're still interested in this tutorial, we encourage you to try making the payment again. If you require any assistance with our platform, please don't hesitate to contact customer service. Thank you for choosing Tutorium.\n\n
+                const ref_ = payload.data.reference;
+                // console.log('Payment reference:', reference);
+
+                const paymentDetails_ = await paymentDetailsModel.findOne({ paymentReference: ref_ });
+                    if (!paymentDetails_) {
+                        console.error('Payment details not found for reference:', reference);
+                        return res.status(404).send('Payment details not found');
+                    }
+
+                const message = `Dear ${paymentDetails_.studentName},
+                We noticed that you attempted to make a payment for a tutorial titled: ${paymentDetails_.tutorialTitle}. However, our system did not process your payment. This may have been due to a network interruption or if you canceled the payment yourself.
+                If you're still interested in this tutorial, we encourage you to try making the payment again. If you require any assistance with our platform, please don't hesitate to contact customer service. Thank you for choosing Tutorium.\n
                 Regards,
-                The Tutorium Team \n\n
+                The Tutorium Team \n
                 [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
                 const subject = "Payment Not Processed!!!";
 
-                let Email = await EmailServices.sendEmail(paymentDetails.studentEmail, paymentDetails.studentName, subject, message);
+                let Email = await EmailServices.sendEmail(paymentDetails_.studentEmail, paymentDetails_.studentName, subject, message);
 
                 if (!Email) {
                     return sendErrorResponse(res, 500, 'Error sending email');

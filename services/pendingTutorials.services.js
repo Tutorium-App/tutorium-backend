@@ -25,24 +25,24 @@ class PendingTutorialServices {
         try {
 
             const message = `
-            Dear Tutorium Admin,\n\n
-            A refund has been requested by a student for the following tutorial:\n
-            Tutorial Title: ${tutorialTitle}\n
-            Tutorial ID: ${tutorialID}\n
-            Cost: ${cost}\n
-            Student Details:\n
-            Name: ${studentName}\n
-            Email: ${studentEmail}\n
-            Number: ${studentNumber}\n
-            Active Number: ${activeNumber}\n
-            Reason: ${reason}\n
-            Tutor Details:\n
-            Name: ${tutorName}\n
-            Email: ${tutorEmail}\n
-            Number: ${tutorNumber}\n\n
-            Please review this refund request and take appropriate action.\n\n
-            Best regards,\n
-            The Tutorium Team \n\n
+            Dear Tutorium Admin,\n
+            A refund has been requested by a student for the following tutorial:
+            Tutorial Title: ${tutorialTitle}
+            Tutorial ID: ${tutorialID}
+            Cost: ${cost}
+            Student Details:
+            Name: ${studentName}
+            Email: ${studentEmail}
+            Number: ${studentNumber}
+            Active Number: ${activeNumber}
+            Reason: ${reason}
+            Tutor Details:
+            Name: ${tutorName}
+            Email: ${tutorEmail}
+            Number: ${tutorNumber}\n
+            Please review this refund request and take appropriate action.\n
+            Best regards,
+            The Tutorium Team \n
             [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
             const subject = `Refund Request: ${tutorialTitle}`;

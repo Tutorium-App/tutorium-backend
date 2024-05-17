@@ -4,17 +4,16 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 async function alertTutorService(tutorName, tutorEmail, studentName, studentEmail, studentNumber, tutorialTitle, amount) {
     
     const message = `Dear ${tutorName},\n
-    We are happy to inform you that your tutorial service titled: "${tutorialTitle}" has been booked by a student from your campus at GHS${amount}.\n
+    We are happy to inform you that your tutorial service titled: "${tutorialTitle}" has been booked by a student from your campus at GHS${amount}.
     This amount will be processed and transfered into your Mobile Money account after the completion of this service. Have in mind that service fees would be deducted. \n
-    \n\n
-    Student Details\n\
-    Name: ${studentName}\n
-    Phone Number: ${studentNumber}\n
-    Email: ${studentEmail}\n\n
-    Contact the student to plan ahead for the tutorial service. If you have any questions or need support, our customer service team is always ready to help.\n\n
-    Best wishes,\n
-    The Tutorium Team \n\n
-        [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
+    Student Details
+    Name: ${studentName}
+    Phone Number: ${studentNumber}
+    Email: ${studentEmail}\n
+    Contact the student to plan ahead for the tutorial service. If you have any questions or need support, our customer service team is always ready to help.\n
+    Best wishes,
+    The Tutorium Team \n
+    [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
     const subject = "Tutorial Service Booked!";
 
