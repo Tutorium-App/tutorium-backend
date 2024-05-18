@@ -1,9 +1,6 @@
 require('dotenv').config();
-const HistoryServices = require('./history.services');
 const PaymentDetailsServices = require('./paymentDetails.services');
 const pendingTutorialsModel = require('../models/pendingTutorials.model');
-const studentModel = require('../models/student.model');
-const tutorModel = require('../models/tutor.model');
 const { getMobileProvider } = require('../utils/providerFinder');
 const { generateTransferReference } = require('../utils/generateReference');
 const axios = require('axios');

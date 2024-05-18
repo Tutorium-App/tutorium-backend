@@ -11,6 +11,7 @@ const { alertTutorVideo } = require('../utils/alertTutorOfNewTutorialVideo');
 const { generateRandomCode } = require('../utils/qrCodeGenerator');
 const BoughtVideoServices = require('../services/boughtVideo.services');
 const PaymentServices = require('../services/payment.services');
+const HistoryServices = require('../services/history.services');
 const crypto = require('crypto');
 
 exports.handlePaystackCallback = async (req, res) => {
@@ -147,7 +148,7 @@ exports.handlePaystackCallback = async (req, res) => {
                 console.log('Transfer was successful');
 
                 const ref = payload.data.reference;
-                console.log('Transfer reference:', ref);
+                // console.log('Transfer reference:', ref);
 
                 const paymentDetail = await payTutorDetailsModel.findOne({ reference: ref });
                 if (paymentDetail) {

@@ -35,6 +35,6 @@ const payTutorDetailsSchema = new Schema({
     }
 }, {timestamps: true});
 
-const paymentTutorDetailsModel = db.model('paymentTutorDetails', payTutorDetailsSchema);
+const payTutorDetailsModel = db.model('payTutorDetails', payTutorDetailsSchema);
 
-module.exports = paymentTutorDetailsModel;
+module.exports = payTutorDetailsModel;
