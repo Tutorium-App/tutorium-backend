@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
+
 const authenticationRouter = require('./routes/authentication.route');
 const studentDataRouter = require('./routes/studentData.route');
 const tutorsDataRouter = require('./routes/tutorsData.route');
@@ -21,6 +23,9 @@ const callbackRouter = require('./routes/callback.route');
  
 
 const app = express(); 
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 
