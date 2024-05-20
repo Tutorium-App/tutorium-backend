@@ -115,6 +115,7 @@ exports.handlePaystackCallback = async (req, res) => {
                     console.error('Error handling successful payment:', error);
                     return res.status(500).send('Error handling successful payment');
                 }
+                break;
 
             case 'charge.failure':
                 console.log('Payment failed');
@@ -143,6 +144,8 @@ exports.handlePaystackCallback = async (req, res) => {
                     return sendErrorResponse(res, 500, 'Error sending email');
                 }
                 return res.status(500).send('Payment failed');
+
+                break;
 
             case 'transfer.success':
                 console.log('Transfer was successful');
