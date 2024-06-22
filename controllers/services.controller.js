@@ -1,10 +1,10 @@
-const ServicesServices = require('../services/review.services');
+const ServicesServices = require('../services/services.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Function to fetch all tutorial services
 exports.fetchAllServices = async (req, res, next) => {
     try {
-        const { school } = req.body;
+        const { school } = req.query;
 
         const services = await ServicesServices.fetchAllServices(school);
 
@@ -21,9 +21,10 @@ exports.fetchAllServices = async (req, res, next) => {
 // Function to fetch popular tutorial services
 exports.fetchPopularServices = async (req, res, next) => {
     try {
-        const { school } = req.body;
+        const { school } = req.query;
 
         const popularServices = await ServicesServices.fetchPopularServices(school);
+        // console.log(popularServices)
 
         if (!popularServices) {
             return sendErrorResponse(res, 500, 'Error fetching tutorial popular services');
@@ -38,7 +39,7 @@ exports.fetchPopularServices = async (req, res, next) => {
 // Function to fetch tutorial services by tutor id
 exports.fetchTutorServices = async (req, res, next) => {
     try {
-        const { tutorID } = req.body;
+        const { tutorID } = req.query;
 
         const services = await ServicesServices.fetchTutorServices(tutorID);
 

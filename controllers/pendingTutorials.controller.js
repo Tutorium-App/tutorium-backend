@@ -22,9 +22,9 @@ exports.fetchPendingTutorials = async (req, res, next) => {
 // Function to create a pending tutorial service
 exports.createPendingTutorial = async (req, res, next) => {
     try {
-        const { tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber } = req.body;
+        const { tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL } = req.body;
 
-        const data = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber);
+        const data = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL);
 
         if (!data) {
             return sendErrorResponse(res, 500, 'Error createing pending tutorial');
@@ -57,9 +57,9 @@ exports.requestRefund = async (req, res, next) => {
 // Function to request a refund
 exports.approveRefund = async (req, res, next) => {
     try {
-        const { tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber } = req.body;
+        const { tutorID, tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber } = req.body;
 
-        const data = await PendingTutorialServices.approveRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber);
+        const data = await PendingTutorialServices.approveRefund(tutorID, tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber);
 
         if (!data) {
             return sendErrorResponse(res, 500, 'Error approving refund request');

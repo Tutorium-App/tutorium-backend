@@ -4,7 +4,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 // Function to fetch all tutorial services and videos
 exports.fetchAllTutorials = async (req, res, next) => {
     try {
-        const { school } = req.body;
+        const { school } = req.query;
 
         const searchData = await SearchServices.fetchAllTutorials(school);
 

@@ -3,9 +3,9 @@ const pendingTutorialModel = require('../models/pendingTutorials.model');
 class PendingTutorialServices {
 
     //function to create new pending tutorial service
-    static async createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber) {
+    static async createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL) {
 
-        const pendingTutorial = new pendingTutorialModel({ tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber });
+        const pendingTutorial = new pendingTutorialModel({ tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL });
         return await pendingTutorial.save();
     }
 
@@ -64,8 +64,12 @@ class PendingTutorialServices {
     }
 
     // function to approve refund
-    static async approveRefund(tutorialID, tutorName, tutorEmail, tutorialTitle) {
+    static async approveRefund(tutorID, tutorialID, tutorName, tutorEmail, tutorialTitle) {
         try {
+            const tutor = await tutorModel.findOne({ tutorID: tutorID });
+            tutor.balance -= amount;
+            await tutor.save();
+
             const message = `
             Dear ${tutorName},\n\n
             We regret to inform you that the tutorial service "${tutorialTitle}" has been cancelled due to a refund request by the student.\n
@@ -92,14 +96,14 @@ class PendingTutorialServices {
     //function to delete pending tutorial service
     static async deletePendingTutorial(tutorialID) {
         try {
-          const pendingTutorialDocument = await pendingTutorialModel.findByIdAndDelete(tutorialID);
-          return !!pendingTutorialDocument; // Return true if deleted, false otherwise
+            const pendingTutorialDocument = await pendingTutorialModel.findByIdAndDelete(tutorialID);
+            return !!pendingTutorialDocument; // Return true if deleted, false otherwise
         } catch (error) {
-          console.error('Error deleting pending tutorial:', error);
-          // Handle different error types here (optional)
-          throw error;
+            console.error('Error deleting pending tutorial:', error);
+            // Handle different error types here (optional)
+            throw error;
         }
-      }
+    }
 }
 
 module.exports = PendingTutorialServices;

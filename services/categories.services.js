@@ -14,6 +14,8 @@ class CategoriesServices {
             // Combine tutorial videos and services into one array
             const combinedData = [...tutorialVideos, ...tutorialServices];
 
+            // console.log(combinedData);
+
             // Return the combined data
             return combinedData.length > 0 ? combinedData : null;
         } catch (error) {

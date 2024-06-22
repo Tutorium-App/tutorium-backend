@@ -6,7 +6,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 exports.fetchRank = async (req, res, next)=>{
     try {
 
-        const {tutorID, school} = req.body;
+        const {tutorID, school} = req.query;
         
         let rank = await RankServices.fetchRank(tutorID, school);
 

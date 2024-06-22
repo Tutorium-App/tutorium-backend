@@ -6,7 +6,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 exports.loadAds = async (req, res, next)=>{
     try {
 
-        const {school} = req.body;
+        const {school} = req.query;
         
         let adsData = await AdsServices.loadAds(school);
 

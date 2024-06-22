@@ -24,30 +24,12 @@ class RankServices {
             // Calculate the position (add 1 because array indices start from 0)
             const position = tutorIndex + 1;
 
-            // Convert position to string with appropriate suffix (e.g., "1st", "2nd", "3rd")
-            const positionString = getPositionString(position);
-
-            return positionString;
+            // Return the position as a string
+            return position.toString(); // <-- Call toString() here
         } catch (error) {
             console.error("Error retrieving tutor's rank:", error);
             throw error; // Re-throw the error to be handled by the controller
         }
-    }
-}
-
-// Helper function to get position suffix
-function getPositionString(position) {
-    const lastDigit = position % 10;
-    const lastTwoDigits = position % 100;
-
-    if (lastDigit === 1 && lastTwoDigits !== 11) {
-        return position + "st";
-    } else if (lastDigit === 2 && lastTwoDigits !== 12) {
-        return position + "nd";
-    } else if (lastDigit === 3 && lastTwoDigits !== 13) {
-        return position + "rd";
-    } else {
-        return position + "th";
     }
 }
 

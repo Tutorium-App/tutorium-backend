@@ -35,6 +35,9 @@ const pendingTutorialSchema = new Schema({
     },
     studentNumber: {
         type: String,
+    },
+    imageURL: {
+        type: String,
     }
 });
 

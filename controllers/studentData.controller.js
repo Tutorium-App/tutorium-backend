@@ -4,7 +4,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 // Function to fetch student data
 exports.studentData = async (req, res, next) => {
     try {
-        const { studentID } = req.body;
+        const { studentID } = req.query;
 
         const data = await StudentDataServices.studentData(studentID);
 

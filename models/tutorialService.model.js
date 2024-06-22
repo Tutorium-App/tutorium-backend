@@ -42,6 +42,9 @@ const tutorialServiceSchema = new Schema({
     sales: {
         type: Number,
     },
+    tutorialType: {
+        type: String,
+    }
 });
 
 const tutorialServiceModel = db.model('TutorialServices', tutorialServiceSchema);
