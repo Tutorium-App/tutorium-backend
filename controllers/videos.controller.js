@@ -4,7 +4,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 // Function to fetch all tutorial videos
 exports.fetchAllVideos = async (req, res, next) => {
     try {
-        const { school } = req.body;
+        const { school } = req.query;
 
         const videos = await VideosServices.fetchAllVideos(school);
 
@@ -21,7 +21,7 @@ exports.fetchAllVideos = async (req, res, next) => {
 // Function to fetch popular tutorial videos
 exports.fetchPopularVideos = async (req, res, next) => {
     try {
-        const { school } = req.body;
+        const { school } = req.query;
 
         const popularVideos = await VideosServices.fetchPopularVideos(school);
 
@@ -38,7 +38,7 @@ exports.fetchPopularVideos = async (req, res, next) => {
 // Function to fetch tutorial videos by tutor id
 exports.fetchTutorVideos = async (req, res, next) => {
     try {
-        const { tutorID } = req.body;
+        const { tutorID } = req.query;
 
         const videos = await VideosServices.fetchTutorVideos(tutorID);
 
