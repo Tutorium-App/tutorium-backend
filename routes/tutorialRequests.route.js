@@ -5,6 +5,12 @@ const tutorialRequestController = require('../controllers/tutorialRequest.contro
 // fetch accepted requests
 router.get('/fetchAcceptedRequests', tutorialRequestController.fetchAcceptedRequests);
 
+// accepted request
+router.post('/acceptedRequest', tutorialRequestController.acceptTutorialRequest);
+
+// create request
+router.post('/createRequest', tutorialRequestController.createRequest);
+
 module.exports = router;
 
 
