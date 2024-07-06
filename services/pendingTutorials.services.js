@@ -1,4 +1,5 @@
 const pendingTutorialModel = require('../models/pendingTutorials.model');
+const EmailServices = require('../services/email.services');
 
 class PendingTutorialServices {
 

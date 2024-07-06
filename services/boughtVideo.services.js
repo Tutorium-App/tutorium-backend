@@ -4,7 +4,9 @@ class BoughtVideoServices {
     // Fetch reviews using a tutorID
     static async loadBoughtVideos(studentID) {
         try {
+            
             const boughtVideos = await boughtVideoModel.find({ studentID: studentID });
+            
             return boughtVideos;
         } catch (error) {
             console.error("Error fetching boughtVideos:", error);

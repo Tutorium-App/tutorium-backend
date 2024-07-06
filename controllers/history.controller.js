@@ -5,7 +5,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 // function to fetch histories
 exports.fetchAllHistory = async (req, res, next)=>{
     try {
-        const {studentID} = req.body;
+        const {studentID} = req.query;
         
         let data = await HistoryServices.load(studentID);
 

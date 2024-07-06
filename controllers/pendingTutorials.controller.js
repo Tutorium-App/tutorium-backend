@@ -5,7 +5,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 // Function to fetch all pending tutorials from the database
 exports.fetchPendingTutorials = async (req, res, next) => {
     try {
-        const { studentID } = req.body;
+        const { studentID } = req.query;
 
         const data = await PendingTutorialServices.fetchPendingTutorials(studentID);
 

@@ -6,7 +6,7 @@ const { sendErrorResponse } = require('../utils/errorHandler');
 exports.loadBoughtVideos = async (req, res, next)=>{
     try {
 
-        const {studentID} = req.body;
+        const {studentID} = req.query;
         
         let boughtVideos = await BoughtVideosServices.loadBoughtVideos(studentID);
 
@@ -23,9 +23,9 @@ exports.loadBoughtVideos = async (req, res, next)=>{
 // Function to create bought video
 exports.createBoughtVideo = async (req, res, next) => {
     try {
-        const { tutorID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink } = req.body;
+        const { tutorID, studentID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink, rating } = req.body;
 
-        const boughtVideo = await BoughtVideosServices.createBoughtVideo(tutorID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink);
+        const boughtVideo = await BoughtVideosServices.createBoughtVideo(tutorID, studentID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink, rating);
 
         if (!boughtVideo) {
             return sendErrorResponse(res, 500, 'Error creating bought video');

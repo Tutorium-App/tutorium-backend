@@ -10,7 +10,6 @@ router.get('/fetchPopularVideos', videosController.fetchPopularVideos);
 // fetch Videos by tutor id
 router.get('/fetchTutorVideos', videosController.fetchTutorVideos);
 
-
 module.exports = router;
 
 //* Define the various routes to the server in this file
