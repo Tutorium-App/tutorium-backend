@@ -24,7 +24,7 @@ const payTutorDetailsSchema = new Schema({
     tutorNumber: {
         type: String
     },
-    tutorialTitle: {
+    title: {
         type: String
     },
     amount: {

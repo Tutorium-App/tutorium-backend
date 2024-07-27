@@ -124,10 +124,10 @@ exports.handlePaystackCallback = async (req, res) => {
                 // console.log('Payment reference:', reference);
 
                 const paymentDetails_ = await paymentDetailsModel.findOne({ paymentReference: ref_ });
-                    if (!paymentDetails_) {
-                        console.error('Payment details not found for reference:', reference);
-                        return res.status(404).send('Payment details not found');
-                    }
+                if (!paymentDetails_) {
+                    console.error('Payment details not found for reference:', reference);
+                    return res.status(404).send('Payment details not found');
+                }
 
                 const message = `Dear ${paymentDetails_.studentName},
                 We noticed that you attempted to make a payment for a tutorial titled: ${paymentDetails_.tutorialTitle}. However, our system did not process your payment. This may have been due to a network interruption or if you canceled the payment yourself.
@@ -157,6 +157,16 @@ exports.handlePaystackCallback = async (req, res) => {
                 if (paymentDetail) {
                     const currentDate = new Date();
 
+                    function formatDate(date) {
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                        const year = date.getFullYear();
+
+                        return `${day}-${month}-${year}`;
+                    }
+
+                    const formattedDate = formatDate(currentDate);
+
                     const student = await studentModel.findOne({ studentID: paymentDetail.studentID });
                     student.numberOfServices++;
                     await student.save();
@@ -165,7 +175,7 @@ exports.handlePaystackCallback = async (req, res) => {
                     tutor.balance -= paymentDetail.amount;
                     await tutor.save();
 
-                    await HistoryServices.createHistory(paymentDetail.tutorID, paymentDetail.tutorName, paymentDetail.studentID, paymentDetail.tutorialTitle, paymentDetail.category, currentDate, paymentDetail.amount);
+                    await HistoryServices.createHistory(paymentDetail.tutorID, paymentDetail.tutorName, paymentDetail.studentID, paymentDetail.title, paymentDetail.category, formattedDate, paymentDetail.amount);
 
                     await payTutorDetailsModel.deleteOne({ reference: ref });
                 }

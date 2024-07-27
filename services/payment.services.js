@@ -120,7 +120,6 @@ class PaymentServices {
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
         const newAmount = amount - (amount * 0.10);
-        // console.log(reference);
 
         try {
             // Create transfer recipient

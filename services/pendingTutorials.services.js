@@ -4,9 +4,9 @@ const EmailServices = require('../services/email.services');
 class PendingTutorialServices {
 
     //function to create new pending tutorial service
-    static async createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL) {
+    static async createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, category, tutorNumber, studentNumber, imageURL) {
 
-        const pendingTutorial = new pendingTutorialModel({ tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL });
+        const pendingTutorial = new pendingTutorialModel({ tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, category, tutorNumber, studentNumber, imageURL });
         return await pendingTutorial.save();
     }
 
