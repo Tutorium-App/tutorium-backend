@@ -21,9 +21,9 @@ exports.fetchReviews = async (req, res, next) => {
 // Function to create reviews
 exports.createReview = async (req, res, next) => {
     try {
-        const { tutorialID, tutorID, studentName, studentYear, TutorialTitle, rating, comment, profilePhotoLink } = req.body;
+        const { tutorialID, tutorID, studentName, studentYear, tutorialTitle, rating, comment, profilePhotoLink } = req.body;
 
-        const reviews = await ReviewServices.createReview(tutorialID, tutorID, studentName, studentYear, TutorialTitle, rating, comment, profilePhotoLink);
+        const reviews = await ReviewServices.createReview(tutorialID, tutorID, studentName, studentYear, tutorialTitle, rating, comment, profilePhotoLink);
 
         if (!reviews) {
             return sendErrorResponse(res, 500, 'Error fetching reviews');
