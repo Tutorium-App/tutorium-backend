@@ -9,6 +9,9 @@ const payTutorDetailsSchema = new Schema({
     recipientCode: {
         type: String
     },
+    tutorialID: {
+        type: String
+    },
     tutorID: {
         type: String
     },

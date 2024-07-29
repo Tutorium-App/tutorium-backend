@@ -52,18 +52,20 @@ exports.makePayment = async (req, res, next) => {
 // Function to pay tutor
 exports.payTutor = async (req, res, next) => {
     try {
-        const { tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID } = req.body;
+        const { tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID } = req.body;
 
-        const payment = await PaymentServices.payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID);
+        const payment = await PaymentServices.payTutor(tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID);
 
         if (!payment) {
-            return sendErrorResponse(res, 500, 'Error making payment');
+            return res.status(500).json({ status: false, message: 'Error making payment' });
         }
 
         res.json({ status: true, success: payment });
     } catch (error) {
-        next(error);
+        console.error('Error in payTutor controller:', error); // Log the error for debugging
+        return res.status(500).json({ status: false, message: error.message });
     } 
-}; 
+};
+ 
 
  

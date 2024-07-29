@@ -153,8 +153,10 @@ exports.handlePaystackCallback = async (req, res) => {
                 const ref = payload.data.reference;
                 // console.log('Transfer reference:', ref);
 
-                const paymentDetail = await payTutorDetailsModel.findOne({ reference: ref });
+                let paymentDetail = await payTutorDetailsModel.findOne({ reference: ref });
+                //console.log("data: ", paymentDetail);
                 if (paymentDetail) {
+                    //console.log("running insider");
                     const currentDate = new Date();
 
                     function formatDate(date) {
@@ -178,6 +180,7 @@ exports.handlePaystackCallback = async (req, res) => {
                     await HistoryServices.createHistory(paymentDetail.tutorID, paymentDetail.tutorName, paymentDetail.studentID, paymentDetail.title, paymentDetail.category, formattedDate, paymentDetail.amount);
 
                     await payTutorDetailsModel.deleteOne({ reference: ref });
+                    await PendingTutorialServices.deletePendingTutorial(paymentDetail.tutorialID);
                 }
 
                 const paymentDs = await payTutorForVideosDetailsModel.findOne({ reference: ref });

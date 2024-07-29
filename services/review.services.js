@@ -51,11 +51,11 @@ class ReviewServices {
             const oldRating = tutor.rating || 0;
             const totalRatings = tutor.numberOfRatings || 0;
             const newRatingCount = totalRatings + 1;
-            const newAverageRating = (oldRating * totalRatings + newRating) / newRatingCount;
+            const newAverageRating = ((oldRating * totalRatings + newRating) / newRatingCount).toFixed(1);
 
             const update = {
                 $inc: { numberOfRatings: 1 },
-                $set: { rating: newAverageRating }
+                $set: { rating: parseFloat(newAverageRating) } // Ensure the rating is stored as a number
             };
 
             const result = await tutorModel.updateOne(filter, update);
@@ -69,5 +69,6 @@ class ReviewServices {
         }
     }
 }
+
 
 module.exports = ReviewServices;

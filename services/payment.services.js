@@ -115,30 +115,30 @@ class PaymentServices {
     }
 
 
-    static async payTutor(tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
+    static async payTutor(tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
         const newAmount = amount - (amount * 0.10);
-
+    
         try {
             // Create transfer recipient
             const recipientCode = await PaymentServices.createTransfer(tutorName, tutorNumber, bankCode);
-            // console.log("Recipient code:", recipientCode);
-
+            
             // Make transfer
             const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
-            // console.log("Payment data:", paymentData);
-
-            if(paymentData){
-                const payTutorDetails = await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, newAmount, category);
+            
+            if (paymentData) {
+                await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, newAmount, category);
             }
-
+    
             return paymentData;
         } catch (error) {
-            throw error;
+            console.error('Error in payTutor service method:', error); // Log the error for debugging
+            throw new Error('Failed to process tutor payment'); // Throw a generic error message
         }
     }
+    
 
 
     // function to pay tutor after student has paid for tutorial video

@@ -11,8 +11,8 @@ class PaymentDetailsServices {
         return await paymentDetail.save();
     }
 
-    static async storePayTutorDetails(reference, recipientCode, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category) {
-        const payTutorDetail = new payTutorDetailsModel({reference, recipientCode, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category});
+    static async storePayTutorDetails(reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category) {
+        const payTutorDetail = new payTutorDetailsModel({reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category});
         return await payTutorDetail.save();
     }
 

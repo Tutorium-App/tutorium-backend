@@ -8,6 +8,7 @@ class TutorDataServices {
             if (!tutor) {
                 return null; // Return null if no tutor is found to allow controller to handle this case
             }
+            console.log(tutor);
             return tutor;
         } catch (error) {
             console.error("Error fetching tutor data:", error);
