@@ -19,6 +19,7 @@ const pendingTutorialsRouter = require('./routes/pendingTutorials.route');
 const historyRouter = require('./routes/history.route');
 const boughtVideosRouter = require('./routes/boughtVideos.route');
 const rankRouter = require('./routes/rank.route');
+const otpRouter = require('./routes/otp.route');
 const callbackRouter = require('./routes/callback.route');
  
 
@@ -44,6 +45,7 @@ app.use('/pending/', pendingTutorialsRouter);
 app.use('/history/', historyRouter);
 app.use('/boughtVideos/', boughtVideosRouter);
 app.use('/rank/', rankRouter);
+app.use('/otp/', otpRouter);
 app.use('/callback/', callbackRouter);
 
 
