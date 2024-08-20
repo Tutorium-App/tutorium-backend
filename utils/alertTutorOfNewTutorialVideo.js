@@ -1,7 +1,7 @@
 const EmailServices = require('../services/email.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
 
-async function alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount) {
+async function alertTutorVideo(tutorEmail, tutorName, tutorialTitle, amount) {
     
     const message = `Dear ${tutorName},\n
     We are happy to inform you that your tutorial video titled: "${tutorialTitle}" has been purchased by a student from your campus at GHS${amount}.
@@ -18,7 +18,7 @@ async function alertTutorVideo(tutorName, tutorEmail, tutorialTitle, amount) {
 
     // Handle email send failure
     if (!Email) {
-        return sendErrorResponse(res, 500, 'Error sending email');
+        return console.log('Error sending email');
     }
 
 }

@@ -40,11 +40,10 @@ class PaymentServices {
                     if (error) {
                         reject(error);
                     } else {
-                        // Check if body.data exists and has the expected structure
                         if (body && body.data && body.data.reference) {
                             const reference = body.data.reference;
-                            const paymentDetails = await PaymentDetailsServices.storePaymentDetails(reference, paymentData.tutorialID, paymentData.tutorID, paymentData.tutorName, paymentData.tutorEmail, paymentData.studentID, paymentData.studentName, paymentData.studentNumber, paymentData.studentEmail, paymentData.tutorNumber, paymentData.tutorialTitle, paymentData.amount);
-                            resolve(body); // Resolve the promise with the entire body
+                            await PaymentDetailsServices.storePaymentDetails(reference, paymentData.tutorialID, paymentData.tutorID, paymentData.tutorName, paymentData.tutorEmail, paymentData.studentID, paymentData.studentName, paymentData.studentNumber, paymentData.studentEmail, paymentData.tutorNumber, paymentData.tutorialTitle, paymentData.amount);
+                            resolve(body); // Resolve with the entire body to access authorization_url
                         } else {
                             console.error('Invalid response structure from Paystack');
                             reject(new Error('Invalid response structure from Paystack'));
@@ -56,7 +55,7 @@ class PaymentServices {
                 reject(error);
             }
         });
-    }
+    }    
 
 
     static async createTransfer(name, accountNumber, bankCode) {
@@ -75,7 +74,6 @@ class PaymentServices {
                         'Content-Type': 'application/json'
                     }
                 });
-
             if (response.data.status) {
                 return response.data.data.recipient_code;
             } else {

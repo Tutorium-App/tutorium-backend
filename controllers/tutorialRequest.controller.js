@@ -7,6 +7,7 @@ exports.fetchAcceptedRequests = async (req, res, next) => {
         const { studentID } = req.query;
 
         const acceptedRequests = await TutorialRequestServices.fetchAcceptedRequests(studentID);
+        // console.log(acceptedRequests);
 
         if (!acceptedRequests) {
             return sendErrorResponse(res, 500, 'Error fetching tutorial requests');
@@ -69,7 +70,8 @@ exports.createRequest = async (req, res, next) => {
             description,
             budget,
             validUntil,
-            amount
+            amount,
+            school
         } = req.body;
 
         const newRequest = await TutorialRequestServices.createRequest(
@@ -81,7 +83,8 @@ exports.createRequest = async (req, res, next) => {
             description,
             budget,
             validUntil,
-            amount
+            amount,
+            school
         );
 
         if (!newRequest) {

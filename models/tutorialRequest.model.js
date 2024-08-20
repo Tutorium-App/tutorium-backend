@@ -30,6 +30,9 @@ const tutorialRequestSchema = new Schema({
     amount: {
         type: Number,
     },
+    school: {
+        type: String,
+    }
 });
 
 const tutorialRequestModel = db.model('TutorialRequest', tutorialRequestSchema);

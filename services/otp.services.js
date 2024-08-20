@@ -9,9 +9,7 @@ class OTPServices {
     static async sendOTP(number, otp) {
         const from = "Tutorium";
         let num = formatNumber(number);
-        let message = `Welcome to Tutorium.\n
-        Your One Time Password is ${otp}
-        Thank you.
+        let message = `Welcome to Tutorium. Your One Time Password is ${otp}. Thank you.
         `;
 
         try {

@@ -68,7 +68,7 @@ class TutorialRequestServices {
         }
     }
 
-    static async createRequest(studentID, studentName, studentEmail, role, requestType, description, budget, validUntil, amount) {
+    static async createRequest(studentID, studentName, studentEmail, role, requestType, description, budget, validUntil, amount, school) {
         try {
             // Create a new tutorial request
             const newRequest = new tutorialRequestModel({
@@ -80,7 +80,8 @@ class TutorialRequestServices {
                 description,
                 budget,
                 validUntil,
-                amount
+                amount,
+                school
             });
 
             // Save the new request to the database

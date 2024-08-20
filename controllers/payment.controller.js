@@ -43,10 +43,11 @@ exports.makePayment = async (req, res, next) => {
             return sendErrorResponse(res, 500, 'Error making payment');
         }
 
-        res.json({ status: true, success: payment });
+        // Send only the authorization_url to the client
+        res.json({ status: true, authorization_url: payment.data.authorization_url });
     } catch (error) {
         next(error);
-    } 
+    }
 }; 
 
 // Function to pay tutor

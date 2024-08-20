@@ -33,6 +33,9 @@ const acceptedTutorialRequestSchema = new Schema({
     amount: {
         type: Number,
     },
+    school: {
+        type: String,
+    }
 });
 
 const acceptedTutorialRequestModel = db.model('AcceptedTutorialRequest', acceptedTutorialRequestSchema);

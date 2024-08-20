@@ -54,7 +54,7 @@ exports.handlePaystackCallback = async (req, res) => {
                             tutor.balance += paymentDetails.amount;
                             await tutor.save();
 
-                            alertTutorService(paymentDetails.tutorName, paymentDetails.tutorEmail, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
+                            alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
 
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
                             await PendingTutorialServices.createPendingTutorial(
@@ -86,7 +86,7 @@ exports.handlePaystackCallback = async (req, res) => {
                                 student.numberOfVideos++;
                                 await student.save();
 
-                                alertTutorVideo(paymentDetails.tutorName, paymentDetails.tutorEmail, paymentDetails.tutorialTitle, paymentDetails.amount);
+                                alertTutorVideo(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.tutorialTitle, paymentDetails.amount);
 
                                 await BoughtVideoServices.createBoughtVideo(
                                     paymentDetails.tutorID,
