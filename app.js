@@ -21,6 +21,7 @@ const boughtVideosRouter = require('./routes/boughtVideos.route');
 const rankRouter = require('./routes/rank.route');
 const otpRouter = require('./routes/otp.route');
 const callbackRouter = require('./routes/callback.route');
+const appDataRouter = require('./routes/appData.route');
  
 
 const app = express(); 
@@ -47,6 +48,7 @@ app.use('/boughtVideos/', boughtVideosRouter);
 app.use('/rank/', rankRouter);
 app.use('/otp/', otpRouter);
 app.use('/callback/', callbackRouter);
+app.use('/appData/', appDataRouter);
 
 
 module.exports = app;
