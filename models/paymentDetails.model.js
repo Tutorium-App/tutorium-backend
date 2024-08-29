@@ -38,6 +38,12 @@ const paymentDetailsSchema = new Schema({
     },
     amount: {
         type: Number
+    },
+    category: {
+        type: String
+    },
+    imageURL: {
+        type: String
     }
 }, {timestamps: true});
 

@@ -38,6 +38,9 @@ const pendingTutorialSchema = new Schema({
     },
     imageURL: {
         type: String,
+    },
+    category: {
+        type: String,
     }
 });
 

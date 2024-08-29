@@ -22,7 +22,7 @@ exports.fetchPayments = async (req, res, next) => {
 // Function to make payment to the Tutorium account
 exports.makePayment = async (req, res, next) => {
     try {
-        const { tutorialID, tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, amount, studentID, studentName, studentNumber, studentEmail } = req.body;
+        const { tutorialID, tutorID, tutorName, tutorEmail, tutorNumber, tutorialTitle, amount, studentID, studentName, studentNumber, studentEmail, category, imageURL } = req.body;
         const paymentData = {
             tutorialID: tutorialID,
             tutorID: tutorID,
@@ -34,7 +34,9 @@ exports.makePayment = async (req, res, next) => {
             studentID: studentID,
             studentName: studentName,
             studentNumber: studentNumber,
-            studentEmail: studentEmail
+            studentEmail: studentEmail,
+            category: category,
+            imageURL: imageURL
         };
 
         const payment = await PaymentServices.makePayment(paymentData);
