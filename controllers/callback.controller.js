@@ -39,6 +39,7 @@ exports.handlePaystackCallback = async (req, res) => {
 
                 try {
                     const paymentDetails = await paymentDetailsModel.findOne({ paymentReference: reference });
+                    console.log(paymentDetails);
                     if (!paymentDetails) {
                         console.error('Payment details not found for reference:', reference);
                         return res.status(404).send('Payment details not found');
