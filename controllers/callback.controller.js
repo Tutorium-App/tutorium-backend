@@ -39,10 +39,18 @@ exports.handlePaystackCallback = async (req, res) => {
 
                 try {
                     const paymentDetails = await paymentDetailsModel.findOne({ paymentReference: reference });
-                    console.log(paymentDetails);
                     if (!paymentDetails) {
                         console.error('Payment details not found for reference:', reference);
                         return res.status(404).send('Payment details not found');
+                    }
+
+                    if (paymentDetails.isRequest) {
+                        const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
+                        if (request) {
+                            console.log("Request deleted");
+                        } else {
+                            console.log("Request not found");
+                        }
                     }
 
                     try {
@@ -76,16 +84,6 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.studentNumber,
                                 paymentDetails.imageURL
                             );
-
-                            console.log(paymentDetails.isRequest, paymentDetails.requestID);
-                            if (paymentDetails.isRequest) {
-                                const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
-                                if (request) {
-                                    console.log("Request deleted");
-                                } else {
-                                    console.log("Request not found");
-                                }
-                            }
 
                         } else {
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
