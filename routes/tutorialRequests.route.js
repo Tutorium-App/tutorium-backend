@@ -6,7 +6,7 @@ const tutorialRequestController = require('../controllers/tutorialRequest.contro
 router.get('/fetchAcceptedRequests', tutorialRequestController.fetchAcceptedRequests);
 
 // accepted request
-router.post('/acceptedRequest', tutorialRequestController.acceptTutorialRequest);
+router.post('/acceptRequest', tutorialRequestController.acceptTutorialRequest);
 
 // create request
 router.post('/createRequest', tutorialRequestController.createRequest);

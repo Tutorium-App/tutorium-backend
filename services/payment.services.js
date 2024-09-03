@@ -42,7 +42,7 @@ class PaymentServices {
                     } else {
                         if (body && body.data && body.data.reference) {
                             const reference = body.data.reference;
-                            await PaymentDetailsServices.storePaymentDetails(reference, paymentData.tutorialID, paymentData.tutorID, paymentData.tutorName, paymentData.tutorEmail, paymentData.studentID, paymentData.studentName, paymentData.studentNumber, paymentData.studentEmail, paymentData.tutorNumber, paymentData.tutorialTitle, paymentData.amount, paymentData.category, paymentData.imageURL);
+                            await PaymentDetailsServices.storePaymentDetails(reference, paymentData.tutorialID, paymentData.tutorID, paymentData.tutorName, paymentData.tutorEmail, paymentData.studentID, paymentData.studentName, paymentData.studentNumber, paymentData.studentEmail, paymentData.tutorNumber, paymentData.tutorialTitle, paymentData.amount, paymentData.category, paymentData.imageURL, paymentData.requestID, paymentData.isRequest);
                             resolve(body); // Resolve with the entire body to access authorization_url
                         } else {
                             console.error('Invalid response structure from Paystack');

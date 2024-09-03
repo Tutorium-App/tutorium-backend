@@ -44,6 +44,12 @@ const paymentDetailsSchema = new Schema({
     },
     imageURL: {
         type: String
+    },
+    requestID: {
+        type: String
+    },
+    isRequest: {
+        type: Boolean
     }
 }, {timestamps: true});
 

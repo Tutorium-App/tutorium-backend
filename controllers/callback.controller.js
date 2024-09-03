@@ -11,6 +11,7 @@ const { alertTutorVideo } = require('../utils/alertTutorOfNewTutorialVideo');
 const { generateRandomCode } = require('../utils/qrCodeGenerator');
 const BoughtVideoServices = require('../services/boughtVideo.services');
 const PaymentServices = require('../services/payment.services');
+const TutorialRequestServices = require('../services/tutorialRequest.services');
 const HistoryServices = require('../services/history.services');
 const crypto = require('crypto');
 
@@ -58,7 +59,8 @@ exports.handlePaystackCallback = async (req, res) => {
 
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
-                            await PendingTutorialServices.createPendingTutorial(
+                        //create pending tutorial
+                        await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
                                 paymentDetails.tutorName,
@@ -73,6 +75,12 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.studentNumber,
                                 paymentDetails.imageURL
                             );
+
+                            //Accept and delete student's request
+                            if(paymentDetails.isRequest) {
+                                await TutorialRequestServices.acceptTutorialRequest(paymentDetails.requestID);
+                            }
+
                         } else {
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
                             if (video) {

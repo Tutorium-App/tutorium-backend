@@ -6,8 +6,8 @@ const connection = require('../config/db');
 
 class PaymentDetailsServices {
     //function to store payment details into database
-    static async storePaymentDetails(paymentReference, tutorialID, tutorID, tutorName, tutorEmail, studentID, studentName, studentNumber, studentEmail, tutorNumber, tutorialTitle, amount, category, imageURL) {
-        const paymentDetail = new paymentDetailsModel({ paymentReference, tutorialID, tutorID, tutorName, tutorEmail, studentID, studentName, studentNumber, studentEmail, tutorNumber, tutorialTitle, amount, category, imageURL });
+    static async storePaymentDetails(paymentReference, tutorialID, tutorID, tutorName, tutorEmail, studentID, studentName, studentNumber, studentEmail, tutorNumber, tutorialTitle, amount, category, imageURL, requestID, isRequest) {
+        const paymentDetail = new paymentDetailsModel({ paymentReference, tutorialID, tutorID, tutorName, tutorEmail, studentID, studentName, studentNumber, studentEmail, tutorNumber, tutorialTitle, amount, category, imageURL, requestID, isRequest });
         return await paymentDetail.save();
     }
 
