@@ -44,6 +44,10 @@ exports.makePayment = async (req, res, next) => {
 
         const payment = await PaymentServices.makePayment(paymentData);
 
+        if (payment) {
+            console.log("payment link sent to client");
+        }
+
         if (!payment) {
             return sendErrorResponse(res, 500, 'Error making payment');
         }

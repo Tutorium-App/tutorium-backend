@@ -22,31 +22,9 @@ exports.fetchAcceptedRequests = async (req, res, next) => {
 // Function to accept tutorial request
 exports.acceptTutorialRequest = async (req, res, next) => {
     try {
-        const {
-            studentRequestID,
-            studentID,
-            tutorID,
-            studentName,
-            tutor,
-            role,
-            requestType,
-            description,
-            budget,
-            amount
-        } = req.body;
+        const {studentRequestID} = req.body;
 
-        const acceptedRequest = await TutorialRequestServices.acceptTutorialRequest(
-            studentRequestID,
-            studentID,
-            tutorID,
-            studentName,
-            tutor,
-            role,
-            requestType,
-            description,
-            budget,
-            amount
-        );
+        const acceptedRequest = await TutorialRequestServices.acceptTutorialRequest(studentRequestID);
 
         if (!acceptedRequest) {
             return sendErrorResponse(res, 500, 'Error accepting tutorial request');
