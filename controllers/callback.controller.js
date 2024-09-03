@@ -76,6 +76,7 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.imageURL
                             );
 
+                            console.log(paymentDetails.isRequest, paymentDetails.requestID);
                             //Accept and delete student's request
                             if(paymentDetails.isRequest) {
                                 await TutorialRequestServices.acceptTutorialRequest(paymentDetails.requestID);
