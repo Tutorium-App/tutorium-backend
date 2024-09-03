@@ -68,20 +68,6 @@ exports.handlePaystackCallback = async (req, res) => {
 
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
-                            console.log(paymentDetails.tutorID,
-                                paymentDetails.studentID,
-                                paymentDetails.tutorName,
-                                paymentDetails.studentName,
-                                paymentDetails.studentEmail,
-                                paymentDetails.tutorEmail,
-                                paymentDetails.tutorialTitle,
-                                paymentDetails.amount,
-                                qrCode,
-                                paymentDetails.category,
-                                paymentDetails.tutorNumber,
-                                paymentDetails.studentNumber,
-                                paymentDetails.imageURL);
-
                             //create pending tutorial
                             await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
