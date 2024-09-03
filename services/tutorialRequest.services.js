@@ -1,6 +1,5 @@
 const tutorialRequestModel = require('../models/tutorialRequest.model');
 const acceptedTutorialRequestModel = require('../models/acceptedRequests.model');
-const EmailServices = require('../services/email.services');
 
 class TutorialRequestServices {
     // Fetch all tutorial requests by school
@@ -14,19 +13,25 @@ class TutorialRequestServices {
         }
     }
 
-    static async acceptTutorialRequest(studentRequestID) {
+    static async deleteTutorialRequest(studentRequestID) {
         try {
             // Delete the request inside tutorialRequestModel by studentRequestID
-            await tutorialRequestModel.findByIdAndDelete(studentRequestID).exec();
+            const deletedRequest = await tutorialRequestModel.findByIdAndDelete(studentRequestID).exec();
+            if (!deletedRequest) {
+                return null;
+            }
 
             // Delete any accepted request inside acceptedTutorialRequestModel using studentRequestID
             await acceptedTutorialRequestModel.deleteMany({ studentRequestID: studentRequestID }).exec();
 
+            return true;
+
         } catch (error) {
-            console.error('Error accepting tutorial request:', error);
+            console.error('Error deleteing tutorial request:', error);
             return null;
         }
     }
+
 
     static async createRequest(studentID, studentName, studentEmail, role, requestType, description, budget, validUntil, amount, school) {
         try {

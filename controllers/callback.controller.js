@@ -60,8 +60,8 @@ exports.handlePaystackCallback = async (req, res) => {
 
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
-                        //create pending tutorial
-                        await PendingTutorialServices.createPendingTutorial(
+                            //create pending tutorial
+                            await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
                                 paymentDetails.tutorName,
@@ -78,10 +78,13 @@ exports.handlePaystackCallback = async (req, res) => {
                             );
 
                             console.log(paymentDetails.isRequest, paymentDetails.requestID);
-                            //Accept and delete student's request
-                            if(paymentDetails.isRequest) {
-                                await TutorialRequestServices.acceptTutorialRequest(paymentDetails.requestID);
-                                console.log("Request deleted");
+                            if (paymentDetails.isRequest) {
+                                const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
+                                if (request) {
+                                    console.log("Request deleted");
+                                } else {
+                                    console.log("Request not found");
+                                }
                             }
 
                         } else {
