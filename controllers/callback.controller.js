@@ -79,6 +79,7 @@ exports.handlePaystackCallback = async (req, res) => {
                             //Accept and delete student's request
                             if(paymentDetails.isRequest) {
                                 await TutorialRequestServices.acceptTutorialRequest(paymentDetails.requestID);
+                                console.log("Request deleted");
                             }
 
                         } else {
