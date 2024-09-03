@@ -46,10 +46,12 @@ const paymentDetailsSchema = new Schema({
         type: String
     },
     requestID: {
-        type: String
+        type: String,
+        required: false
     },
     isRequest: {
-        type: Boolean
+        type: Boolean,
+        false: false
     }
 }, {timestamps: true});
 
