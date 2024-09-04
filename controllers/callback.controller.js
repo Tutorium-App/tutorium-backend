@@ -38,13 +38,16 @@ exports.handlePaystackCallback = async (req, res) => {
                 // console.log('Payment reference:', reference);
 
                 try {
+                    console.log("fetching payment reference...");
                     const paymentDetails = await paymentDetailsModel.findOne({ paymentReference: reference });
+                    console.log("found payment reference");
                     if (!paymentDetails) {
                         console.error('Payment details not found for reference:', reference);
                         return res.status(404).send('Payment details not found');
                     }
 
                     if (paymentDetails.isRequest) {
+                        console.log("deleting request...");
                         const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
                         if (request) {
                             console.log("Request deleted");
@@ -54,38 +57,47 @@ exports.handlePaystackCallback = async (req, res) => {
                     }
 
                     try {
+                        console.log("fetching tutorial service...");
                         const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
+                        console.log("found tutorial service");
                         if (service) {
                             service.sales++;
                             await service.save();
 
+                            console.log("updating tutor balance...");
                             const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
                             tutor.sales++;
                             tutor.balance += paymentDetails.amount;
                             await tutor.save();
+                            console.log("updated tutor balance");
 
+                            console.log("alerting tutor of new tutorial service...");
                             await alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
+                            console.log("Request deleted");
 
+                            console.log("generating QR code...");
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
+                            console.log("QR code generated: ", qrCode);
 
+                            console.log("creating pending tutorial...");
                             //create pending tutorial
-                            // await PendingTutorialServices.createPendingTutorial(
-                            //     paymentDetails.tutorID,
-                            //     paymentDetails.studentID,
-                            //     paymentDetails.tutorName,
-                            //     paymentDetails.studentName,
-                            //     paymentDetails.studentEmail,
-                            //     paymentDetails.tutorEmail,
-                            //     paymentDetails.tutorialTitle,
-                            //     paymentDetails.amount,
-                            //     qrCode,
-                            //     paymentDetails.category,
-                            //     paymentDetails.tutorNumber,
-                            //     paymentDetails.studentNumber,
-                            //     paymentDetails.imageURL
-                            // );
+                            await PendingTutorialServices.createPendingTutorial(
+                                paymentDetails.tutorID,
+                                paymentDetails.studentID,
+                                paymentDetails.tutorName,
+                                paymentDetails.studentName,
+                                paymentDetails.studentEmail,
+                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorialTitle,
+                                paymentDetails.amount,
+                                qrCode,
+                                paymentDetails.category,
+                                paymentDetails.tutorNumber,
+                                paymentDetails.studentNumber,
+                                paymentDetails.imageURL
+                            );
 
-                            console.log("done");
+                            console.log("created pending tutorial");
 
                         } else {
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
