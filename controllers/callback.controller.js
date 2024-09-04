@@ -64,7 +64,7 @@ exports.handlePaystackCallback = async (req, res) => {
                             tutor.balance += paymentDetails.amount;
                             await tutor.save();
 
-                            alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
+                            await alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
 
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
