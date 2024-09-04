@@ -61,15 +61,26 @@ exports.handlePaystackCallback = async (req, res) => {
                         const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
                         console.log("found tutorial service");
                         if (service) {
-                            service.sales++;
-                            await service.save();
+                            try {
+                                service.sales++;
+                                await service.save();
+                                console.log("Service updated successfully.");
+                            } catch (err) {
+                                console.error('Error saving service:', err);
+                                return res.status(500).send('Error saving service');
+                            }
 
                             console.log("updating tutor balance...");
                             const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
-                            tutor.sales++;
-                            tutor.balance += paymentDetails.amount;
-                            await tutor.save();
-                            console.log("updated tutor balance");
+                            try {
+                                tutor.sales++;
+                                tutor.balance += paymentDetails.amount;
+                                await tutor.save();
+                                console.log("Tutor updated successfully.");
+                            } catch (err) {
+                                console.error('Error saving tutor:', err);
+                                return res.status(500).send('Error saving tutor');
+                            }
 
                             console.log("alerting tutor of new tutorial service...");
                             await alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
