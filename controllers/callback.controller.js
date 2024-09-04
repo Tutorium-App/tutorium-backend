@@ -69,21 +69,21 @@ exports.handlePaystackCallback = async (req, res) => {
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
                             //create pending tutorial
-                            await PendingTutorialServices.createPendingTutorial(
-                                paymentDetails.tutorID,
-                                paymentDetails.studentID,
-                                paymentDetails.tutorName,
-                                paymentDetails.studentName,
-                                paymentDetails.studentEmail,
-                                paymentDetails.tutorEmail,
-                                paymentDetails.tutorialTitle,
-                                paymentDetails.amount,
-                                qrCode,
-                                paymentDetails.category,
-                                paymentDetails.tutorNumber,
-                                paymentDetails.studentNumber,
-                                paymentDetails.imageURL
-                            );
+                            // await PendingTutorialServices.createPendingTutorial(
+                            //     paymentDetails.tutorID,
+                            //     paymentDetails.studentID,
+                            //     paymentDetails.tutorName,
+                            //     paymentDetails.studentName,
+                            //     paymentDetails.studentEmail,
+                            //     paymentDetails.tutorEmail,
+                            //     paymentDetails.tutorialTitle,
+                            //     paymentDetails.amount,
+                            //     qrCode,
+                            //     paymentDetails.category,
+                            //     paymentDetails.tutorNumber,
+                            //     paymentDetails.studentNumber,
+                            //     paymentDetails.imageURL
+                            // );
 
                             console.log("done");
 
