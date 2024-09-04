@@ -35,12 +35,11 @@ exports.handlePaystackCallback = async (req, res) => {
                 console.log('Payment was successful');
 
                 const reference = payload.data.reference;
-                // console.log('Payment reference:', reference);
-
                 try {
                     console.log("fetching payment reference...");
                     const paymentDetails = await paymentDetailsModel.findOne({ paymentReference: reference });
                     console.log("found payment reference");
+
                     if (!paymentDetails) {
                         console.error('Payment details not found for reference:', reference);
                         return res.status(404).send('Payment details not found');
@@ -56,42 +55,63 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
                     }
 
-                    try {
-                        console.log("fetching tutorial service...");
-                        const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
-                        console.log("found tutorial service");
-                        if (service) {
-                            try {
-                                service.sales++;
-                                await service.save();
-                                console.log("Service updated successfully.");
-                            } catch (err) {
-                                console.error('Error saving service:', err);
-                                return res.status(500).send('Error saving service');
-                            }
+                    console.log("fetching tutorial service...");
+                    const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
+                    console.log("found tutorial service");
+                    if (service) {
+                        try {
+                            console.log("Incrementing service sales...");
+                            service.sales++;
+                            await service.save();
+                            console.log("Service updated successfully.");
+                        } catch (err) {
+                            console.error('Error saving service:', err);
+                            return res.status(500).send('Error saving service');
+                        }
 
-                            console.log("updating tutor balance...");
+                        try {
+                            console.log("Fetching tutor details...");
                             const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
-                            try {
-                                tutor.sales++;
-                                tutor.balance += paymentDetails.amount;
-                                await tutor.save();
-                                console.log("Tutor updated successfully.");
-                            } catch (err) {
-                                console.error('Error saving tutor:', err);
-                                return res.status(500).send('Error saving tutor');
+                            if (!tutor) {
+                                console.error("Tutor not found with tutorID:", paymentDetails.tutorID);
+                                return res.status(404).send('Tutor not found');
                             }
 
-                            console.log("alerting tutor of new tutorial service...");
-                            await alertTutorService(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.studentName, paymentDetails.studentEmail, paymentDetails.studentNumber, paymentDetails.tutorialTitle, paymentDetails.amount);
-                            console.log("Request deleted");
+                            console.log("Tutor details found:", tutor);
+                            tutor.sales++;
+                            tutor.balance += paymentDetails.amount;
 
+                            console.log("Saving tutor details...");
+                            await tutor.save();
+                            console.log("Tutor updated successfully.");
+                        } catch (err) {
+                            console.error('Error saving tutor:', err);
+                            return res.status(500).send('Error saving tutor');
+                        }
+
+                        try {
+                            console.log("alerting tutor of new tutorial service...");
+                            await alertTutorService(
+                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorName,
+                                paymentDetails.studentName,
+                                paymentDetails.studentEmail,
+                                paymentDetails.studentNumber,
+                                paymentDetails.tutorialTitle,
+                                paymentDetails.amount
+                            );
+                            console.log("Tutor alerted");
+                        } catch (err) {
+                            console.error('Error alerting tutor:', err);
+                            return res.status(500).send('Error alerting tutor');
+                        }
+
+                        try {
                             console.log("generating QR code...");
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
                             console.log("QR code generated: ", qrCode);
 
                             console.log("creating pending tutorial...");
-                            //create pending tutorial
                             await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
@@ -107,14 +127,18 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.studentNumber,
                                 paymentDetails.imageURL
                             );
-
                             console.log("created pending tutorial");
-
-                        } else {
+                        } catch (err) {
+                            console.error('Error creating pending tutorial:', err);
+                            return res.status(500).send('Error creating pending tutorial');
+                        }
+                    } else {
+                        try {
+                            console.log("Fetching tutorial video...");
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
                             if (video) {
+                                console.log("Processing video purchase...");
                                 await PaymentServices.payTutorForVideo(paymentDetails.amount, paymentDetails.tutorNumber, paymentDetails.tutorName);
-
                                 video.sales++;
                                 await video.save();
 
@@ -143,19 +167,28 @@ exports.handlePaystackCallback = async (req, res) => {
                                     video.videoLink
                                 );
                             }
+                        } catch (err) {
+                            console.error('Error processing video:', err);
+                            return res.status(500).send('Error processing video');
                         }
-                    } catch (err) {
-                        console.error('Error handling successful payment:', err);
-                        return res.status(500).send('Error handling successful payment');
                     }
 
-                    await paymentDetailsModel.deleteOne({ paymentReference: reference });
+                    try {
+                        console.log("Deleting payment details...");
+                        await paymentDetailsModel.deleteOne({ paymentReference: reference });
+                        console.log("Payment details deleted");
+                    } catch (err) {
+                        console.error('Error deleting payment details:', err);
+                        return res.status(500).send('Error deleting payment details');
+                    }
+
                     return res.status(200).send('Payment successful');
                 } catch (error) {
                     console.error('Error handling successful payment:', error);
                     return res.status(500).send('Error handling successful payment');
                 }
                 break;
+
 
             case 'charge.failure':
                 console.log('Payment failed');
