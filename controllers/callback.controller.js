@@ -59,6 +59,7 @@ exports.handlePaystackCallback = async (req, res) => {
                     console.log("fetching tutorial service...");
                     const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
                     const acceptedRequest = await acceptedTutorialRequestModel.findOne({ studentRequestID: paymentDetails.requestID });
+                    console.log(acceptedRequest);
 
                     if (service) {
                         try {
