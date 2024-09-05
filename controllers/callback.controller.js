@@ -1,5 +1,6 @@
 const PendingTutorialServices = require('../services/pendingTutorials.services');
 const tutorialServiceModel = require('../models/tutorialService.model');
+const acceptedTutorialRequestModel = require('../models/acceptedRequests.model');
 const paymentDetailsModel = require('../models/paymentDetails.model');
 const payTutorDetailsModel = require('../models/payTutorDetails.model');
 const payTutorForVideosDetailsModel = require('../models/payTutorForVideo.model');
@@ -57,7 +58,8 @@ exports.handlePaystackCallback = async (req, res) => {
 
                     console.log("fetching tutorial service...");
                     const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
-                    console.log("found tutorial service");
+                    const acceptedRequest = await acceptedTutorialRequestModel.findOne({ studentRequestID: paymentDetails.requestID });
+
                     if (service) {
                         try {
                             console.log("Incrementing service sales...");
@@ -77,7 +79,6 @@ exports.handlePaystackCallback = async (req, res) => {
                                 return res.status(404).send('Tutor not found');
                             }
 
-                            console.log("Tutor details found:", tutor);
                             tutor.sales++;
                             tutor.balance += paymentDetails.amount;
 
@@ -132,7 +133,70 @@ exports.handlePaystackCallback = async (req, res) => {
                             console.error('Error creating pending tutorial:', err);
                             return res.status(500).send('Error creating pending tutorial');
                         }
-                    } else {
+                    }else if(acceptedRequest){
+                        try {
+                            console.log("Fetching tutor details...");
+                            const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
+                            if (!tutor) {
+                                console.error("Tutor not found with tutorID:", paymentDetails.tutorID);
+                                return res.status(404).send('Tutor not found');
+                            }
+
+                            tutor.sales++;
+                            tutor.balance += paymentDetails.amount;
+
+                            console.log("Saving tutor details...");
+                            await tutor.save();
+                            console.log("Tutor updated successfully.");
+                        } catch (err) {
+                            console.error('Error saving tutor:', err);
+                            return res.status(500).send('Error saving tutor');
+                        }
+
+                        try {
+                            console.log("alerting tutor of new tutorial service...");
+                            await alertTutorService(
+                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorName,
+                                paymentDetails.studentName,
+                                paymentDetails.studentEmail,
+                                paymentDetails.studentNumber,
+                                paymentDetails.tutorialTitle,
+                                paymentDetails.amount
+                            );
+                            console.log("Tutor alerted");
+                        } catch (err) {
+                            console.error('Error alerting tutor:', err);
+                            return res.status(500).send('Error alerting tutor');
+                        }
+
+                        try {
+                            console.log("generating QR code...");
+                            const qrCode = generateRandomCode(paymentDetails.tutorialID);
+                            console.log("QR code generated: ", qrCode);
+
+                            console.log("creating pending tutorial...");
+                            await PendingTutorialServices.createPendingTutorial(
+                                paymentDetails.tutorID,
+                                paymentDetails.studentID,
+                                paymentDetails.tutorName,
+                                paymentDetails.studentName,
+                                paymentDetails.studentEmail,
+                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorialTitle,
+                                paymentDetails.amount,
+                                qrCode,
+                                paymentDetails.category,
+                                paymentDetails.tutorNumber,
+                                paymentDetails.studentNumber,
+                                paymentDetails.imageURL
+                            );
+                            console.log("created pending tutorial");
+                        } catch (err) {
+                            console.error('Error creating pending tutorial:', err);
+                            return res.status(500).send('Error creating pending tutorial');
+                        }
+                    }else {
                         try {
                             console.log("Fetching tutorial video...");
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
