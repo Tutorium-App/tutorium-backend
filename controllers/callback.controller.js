@@ -46,14 +46,11 @@ exports.handlePaystackCallback = async (req, res) => {
                         return res.status(404).send('Payment details not found');
                     }
 
-                    console.log("fetching tutorial service...");
                     const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
                     const acceptedRequest = await acceptedTutorialRequestModel.findOne({ studentRequestID: paymentDetails.requestID });
-                    console.log(acceptedRequest);
 
                     if (service) {
                         try {
-                            console.log("Incrementing service sales...");
                             service.sales++;
                             await service.save();
                             console.log("Service updated successfully.");
@@ -63,7 +60,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
 
                         try {
-                            console.log("Fetching tutor details...");
                             const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
                             if (!tutor) {
                                 console.error("Tutor not found with tutorID:", paymentDetails.tutorID);
@@ -73,7 +69,6 @@ exports.handlePaystackCallback = async (req, res) => {
                             tutor.sales++;
                             tutor.balance += paymentDetails.amount;
 
-                            console.log("Saving tutor details...");
                             await tutor.save();
                             console.log("Tutor updated successfully.");
                         } catch (err) {
@@ -82,7 +77,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
 
                         try {
-                            console.log("alerting tutor of new tutorial service...");
                             await alertTutorService(
                                 paymentDetails.tutorEmail,
                                 paymentDetails.tutorName,
@@ -99,11 +93,8 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
 
                         try {
-                            console.log("generating QR code...");
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
-                            console.log("QR code generated: ", qrCode);
 
-                            console.log("creating pending tutorial...");
                             await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
@@ -126,7 +117,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
                     }else if(acceptedRequest){
                         try {
-                            console.log("Fetching tutor details...");
                             const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
                             if (!tutor) {
                                 console.error("Tutor not found with tutorID:", paymentDetails.tutorID);
@@ -136,7 +126,6 @@ exports.handlePaystackCallback = async (req, res) => {
                             tutor.sales++;
                             tutor.balance += paymentDetails.amount;
 
-                            console.log("Saving tutor details...");
                             await tutor.save();
                             console.log("Tutor updated successfully.");
                         } catch (err) {
@@ -145,7 +134,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
 
                         try {
-                            console.log("alerting tutor of new tutorial service...");
                             await alertTutorService(
                                 paymentDetails.tutorEmail,
                                 paymentDetails.tutorName,
@@ -162,11 +150,8 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
 
                         try {
-                            console.log("generating QR code...");
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
-                            console.log("QR code generated: ", qrCode);
 
-                            console.log("creating pending tutorial...");
                             await PendingTutorialServices.createPendingTutorial(
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
@@ -185,7 +170,6 @@ exports.handlePaystackCallback = async (req, res) => {
                             console.log("created pending tutorial");
 
                             if (paymentDetails.isRequest) {
-                                console.log("deleting request...");
                                 const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
                                 if (request) {
                                     console.log("Request deleted");
@@ -199,7 +183,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         }
                     }else {
                         try {
-                            console.log("Fetching tutorial video...");
                             const video = await tutorialVideoModel.findById(paymentDetails.tutorialID);
                             if (video) {
                                 console.log("Processing video purchase...");
