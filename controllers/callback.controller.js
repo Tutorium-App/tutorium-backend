@@ -46,16 +46,6 @@ exports.handlePaystackCallback = async (req, res) => {
                         return res.status(404).send('Payment details not found');
                     }
 
-                    if (paymentDetails.isRequest) {
-                        console.log("deleting request...");
-                        const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
-                        if (request) {
-                            console.log("Request deleted");
-                        } else {
-                            console.log("Request not found");
-                        }
-                    }
-
                     console.log("fetching tutorial service...");
                     const service = await tutorialServiceModel.findById(paymentDetails.tutorialID);
                     const acceptedRequest = await acceptedTutorialRequestModel.findOne({ studentRequestID: paymentDetails.requestID });
@@ -193,6 +183,16 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.imageURL
                             );
                             console.log("created pending tutorial");
+
+                            if (paymentDetails.isRequest) {
+                                console.log("deleting request...");
+                                const request = await TutorialRequestServices.deleteTutorialRequest(paymentDetails.requestID);
+                                if (request) {
+                                    console.log("Request deleted");
+                                } else {
+                                    console.log("Request not found");
+                                }
+                            }
                         } catch (err) {
                             console.error('Error creating pending tutorial:', err);
                             return res.status(500).send('Error creating pending tutorial');
