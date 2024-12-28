@@ -18,7 +18,7 @@ class EmailServices {
                     to_email: email,
                     from_name: "Tutorium",
                     to_name: fullName,
-                    reply_to: 'buabassahlawson@gmail.com',
+                    reply_to: 'tutorium.customer@gmail.com',
                     subject: mySubject,
                     message: myMessage,
                 },
