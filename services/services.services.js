@@ -18,7 +18,7 @@ class ServicesServices {
             const popularServices = await tutorialServiceModel
                 .find({ school: school, verified: true }, { verified: 0 }) // Exclude verified property from result
                 .sort({ sales: -1 })
-                .limit(5); // Limit the results to top 5 services
+                .limit(3); // Limit the results to top 5 services
             return popularServices;
         } catch (error) {
             console.error("Error fetching popular tutorial services:", error);
