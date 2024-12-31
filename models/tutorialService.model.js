@@ -44,6 +44,10 @@ const tutorialServiceSchema = new Schema({
     },
     tutorialType: {
         type: String,
+    },
+    verified: {
+        type: Boolean,
+        default: false,
     }
 });
 

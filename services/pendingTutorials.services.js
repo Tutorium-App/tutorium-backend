@@ -47,7 +47,7 @@ class PendingTutorialServices {
             [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
             const subject = `Refund Request: ${tutorialTitle}`;
-            const email = "buabassahlawson01@gmail.com"; //todo: admin email goes here
+            const email = "tutorium.customer@gmail.com"; 
             const name = "Tutorium Admin"
 
             // Attempt to send the email

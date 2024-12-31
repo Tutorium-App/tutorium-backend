@@ -4,7 +4,7 @@ class VideosServices {
     // Fetch all tutorial videos for a given school
     static async fetchAllVideos(school) {
         try {
-            const videos = await tutorialVideoModel.find({ school: school });
+            const videos = await tutorialVideoModel.find({ school: school, verified: true }, { verified: 0 }); // Exclude verified property from result
             return videos;
         } catch (error) {
             console.error("Error fetching all tutorial videos:", error);
@@ -16,7 +16,7 @@ class VideosServices {
     static async fetchPopularVideos(school) {
         try {
             const popularVideos = await tutorialVideoModel
-                .find({ school: school })
+                .find({ school: school, verified: true }, { verified: 0 }) // Exclude verified property from result
                 .sort({ sales: -1 })
                 .limit(5); // Limit the results to top 5 videos
             return popularVideos;
@@ -29,7 +29,10 @@ class VideosServices {
     // Fetch tutorial videos by tutor ID
     static async fetchTutorVideos(tutorID) {
         try {
-            const videos = await tutorialVideoModel.find({ tutorID: tutorID });
+            const videos = await tutorialVideoModel.find(
+                { tutorID: tutorID, verified: true },
+                { verified: 0 } // Exclude verified property from result
+            );
             return videos;
         } catch (error) {
             console.error("Error fetching tutorial videos by tutor ID:", error);

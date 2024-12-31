@@ -5,16 +5,14 @@ class CategoriesServices {
     // Function to load category data based on school and category type
     static async load(school, categoryType) {
         try {
-            // Fetch tutorial videos based on school
-            const tutorialVideos = await tutorialVideoModel.find({ school: school, category: categoryType });
+            // Fetch tutorial videos based on school and category, and where verified is true
+            const tutorialVideos = await tutorialVideoModel.find({ school: school, category: categoryType, verified: true }, { verified: 0 });
 
-            // Fetch tutorial services based on school
-            const tutorialServices = await tutorialServiceModel.find({ school: school, category: categoryType });
+            // Fetch tutorial services based on school and category, and where verified is true
+            const tutorialServices = await tutorialServiceModel.find({ school: school, category: categoryType, verified: true }, { verified: 0 });
 
             // Combine tutorial videos and services into one array
             const combinedData = [...tutorialVideos, ...tutorialServices];
-
-            // console.log(combinedData);
 
             // Return the combined data
             return combinedData.length > 0 ? combinedData : null;

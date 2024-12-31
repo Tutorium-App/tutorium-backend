@@ -4,7 +4,7 @@ class ServicesServices {
     // Fetch all tutorial services for a given school
     static async fetchAllServices(school) {
         try {
-            const services = await tutorialServiceModel.find({ school: school });
+            const services = await tutorialServiceModel.find({ school: school, verified: true }, { verified: 0 });
             return services;
         } catch (error) {
             console.error("Error fetching all tutorial services:", error);
@@ -16,7 +16,7 @@ class ServicesServices {
     static async fetchPopularServices(school) {
         try {
             const popularServices = await tutorialServiceModel
-                .find({ school: school })
+                .find({ school: school, verified: true }, { verified: 0 }) // Exclude verified property from result
                 .sort({ sales: -1 })
                 .limit(5); // Limit the results to top 5 services
             return popularServices;
@@ -29,7 +29,9 @@ class ServicesServices {
     // Fetch tutorial services by tutor ID
     static async fetchTutorServices(tutorID) {
         try {
-            const services = await tutorialServiceModel.find({ tutorID: tutorID });
+            const services = await tutorialServiceModel
+                .find({ tutorID: tutorID, verified: true }, { verified: 0 }) // Exclude verified property from result
+                .exec();
             return services;
         } catch (error) {
             console.error("Error fetching tutorial services by tutor ID:", error);
