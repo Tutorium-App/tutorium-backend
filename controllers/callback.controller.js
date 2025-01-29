@@ -1,4 +1,5 @@
 const PendingTutorialServices = require('../services/pendingTutorials.services');
+const SMSServices = require('../services/sms.services');
 const tutorialServiceModel = require('../models/tutorialService.model');
 const acceptedTutorialRequestModel = require('../models/acceptedRequests.model');
 const paymentDetailsModel = require('../models/paymentDetails.model');
@@ -250,19 +251,12 @@ exports.handlePaystackCallback = async (req, res) => {
                     return res.status(404).send('Payment details not found');
                 }
 
-                const message = `Dear ${paymentDetails_.studentName},
-                We noticed that you attempted to make a payment for a tutorial titled: ${paymentDetails_.tutorialTitle}. However, our system did not process your payment. This may have been due to a network interruption or if you canceled the payment yourself.
-                If you're still interested in this tutorial, we encourage you to try making the payment again. If you require any assistance with our platform, please don't hesitate to contact customer service. Thank you for choosing Tutorium.\n
-                Regards,
-                The Tutorium Team \n
-                [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
+                const message = `Dear student, your payment for '${paymentDetails_.tutorialTitle}' was not processed. Please try again if you're still interested.`;
 
-                const subject = "Payment Not Processed!!!";
+                let SMS = await SMSServices.sendSMS(paymentDetails_.studentNumber, message);
 
-                let Email = await EmailServices.sendEmail(paymentDetails_.studentEmail, paymentDetails_.studentName, subject, message);
-
-                if (!Email) {
-                    return sendErrorResponse(res, 500, 'Error sending email');
+                if (!SMS) {
+                    return sendErrorResponse(res, 500, 'Error sending SMS');
                 }
                 return res.status(500).send('Payment failed');
 

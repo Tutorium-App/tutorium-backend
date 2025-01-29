@@ -1,5 +1,5 @@
 const pendingTutorialModel = require('../models/pendingTutorials.model');
-const EmailServices = require('../services/email.services');
+const SMSServices = require('../services/sms.services');
 
 class PendingTutorialServices {
 
@@ -46,16 +46,14 @@ class PendingTutorialServices {
             The Tutorium Team \n
             [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
-            const subject = `Refund Request: ${tutorialTitle}`;
-            const email = "tutorium.customer@gmail.com"; 
-            const name = "Tutorium Admin"
+            const SMS = await saveMessage(message);
+            // Send SMS to admin
+            const smsMessage = `Hi admin, review this refund request: ${SMS}`;
+            let requestRefundSMS = await SMSServices.sendSMS("0256772900", smsMessage);
 
-            // Attempt to send the email
-            let requestRefundMail = await EmailServices.sendEmail(email, name, subject, message);
-
-            // Handle email send failure
-            if (!requestRefundMail) {
-                return sendErrorResponse(res, 500, 'Error sending email');
+            // Handle sms send failure
+            if (!requestRefundSMS) {
+                return sendErrorResponse(res, 500, 'Error sending SMS');
             }
 
         } catch (error) {
@@ -73,15 +71,21 @@ class PendingTutorialServices {
 
             const message = `
             Dear ${tutorName},\n\n
-            We regret to inform you that the tutorial service "${tutorialTitle}" has been cancelled due to a refund request by the student.\n
+            We regret to inform you that the tutorial service "${tutorialTitle}" booked by a student has been cancelled due to a refund request by the student.\n
             If you have any questions or concerns, please feel free to contact us.\n\n
             Best regards,\n
-            Tutorium Team`;
+            Tutorium Team
+            [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
-            const subject = `Tutorial Service Cancellation: ${tutorialTitle}`;
+            const SMS = await saveMessage(message);
+            // Send SMS to tutor
+            const smsMessage = `Hi tutor, review this refund request: ${SMS}`;
+            let requestRefundSMS = await SMSServices.sendSMS(tutor.phone, smsMessage);
 
-            // Attempt to send the email
-            await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
+            // Handle sms send failure
+            if (!requestRefundSMS) {
+                return sendErrorResponse(res, 500, 'Error sending SMS');
+            }
 
             // Delete pendingTutorial by its ID
             await pendingTutorialModel.findByIdAndDelete(tutorialID);
