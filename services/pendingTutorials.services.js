@@ -25,8 +25,9 @@ class PendingTutorialServices {
     static async requestRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber) {
         try {
 
-            const message = `
-            Dear Tutorium Admin,\n
+            const message = 
+            `Dear Tutorium Admin,
+
             A refund has been requested by a student for the following tutorial:
             Tutorial Title: ${tutorialTitle}
             Tutorial ID: ${tutorialID}
@@ -40,10 +41,13 @@ class PendingTutorialServices {
             Tutor Details:
             Name: ${tutorName}
             Email: ${tutorEmail}
-            Number: ${tutorNumber}\n
-            Please review this refund request and take appropriate action.\n
+            Number: ${tutorNumber}
+
+            Please review this refund request and take appropriate action.
+
             Best regards,
-            The Tutorium Team \n
+            The Tutorium Team 
+
             [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
             const SMS = await saveMessage(message);
@@ -69,12 +73,15 @@ class PendingTutorialServices {
             tutor.balance -= amount;
             await tutor.save();
 
-            const message = `
-            Dear ${tutorName},\n\n
-            We regret to inform you that the tutorial service "${tutorialTitle}" booked by a student has been cancelled due to a refund request by the student.\n
-            If you have any questions or concerns, please feel free to contact us.\n\n
-            Best regards,\n
+            const message = 
+            `Dear ${tutorName},
+
+            We regret to inform you that the tutorial service "${tutorialTitle}" booked by a student has been cancelled due to a refund request by the student.
+            If you have any questions or concerns, please feel free to contact us.
+
+            Best regards,
             Tutorium Team
+            
             [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
             const SMS = await saveMessage(message);
