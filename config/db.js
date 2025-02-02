@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const connection = mongoose.createConnection('mongodb+srv://eyarko:%40password123@lawsonscluster.l1vqepq.mongodb.net/Tutorium-Tutor').on('open', ()=>{
+const connection = mongoose.createConnection('mongodb+srv://tutorium:tutorium24@tutoriumcluster.u2c1c.mongodb.net/Tutorium').on('open', ()=>{
     console.log("Database connected successfully");
 }).on('error', ()=>{
     console.log("Error connecting to database");
