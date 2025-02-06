@@ -26,7 +26,7 @@ class PendingTutorialServices {
     static async requestRefund(tutorialID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, tutorNumber, studentNumber, reason, activeNumber) {
         try {
 
-            const message = 
+            let message = 
             `Dear Tutorium Admin,
 
             A refund has been requested by a student for the following tutorial:
@@ -74,7 +74,7 @@ class PendingTutorialServices {
             tutor.balance -= amount;
             await tutor.save();
 
-            const message = 
+            let message = 
             `Dear ${tutorName},
 
             We regret to inform you that the tutorial service "${tutorialTitle}" booked by a student has been cancelled due to a refund request by the student.
