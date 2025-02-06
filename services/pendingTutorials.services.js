@@ -58,7 +58,7 @@ class PendingTutorialServices {
 
             // Handle sms send failure
             if (!requestRefundSMS) {
-                return sendErrorResponse(res, 500, 'Error sending SMS');
+                console.log('Error sending SMS');
             }
 
         } catch (error) {
@@ -92,7 +92,7 @@ class PendingTutorialServices {
 
             // Handle sms send failure
             if (!requestRefundSMS) {
-                return sendErrorResponse(res, 500, 'Error sending SMS');
+                console.log('Error sending SMS');
             }
 
             // Delete pendingTutorial by its ID
