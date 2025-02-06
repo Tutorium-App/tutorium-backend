@@ -1,8 +1,8 @@
-const EmailServices = require('../services/email.services');
-const { sendErrorResponse } = require('../utils/errorHandler');
+const SMSServices = require('../services/sms.services');
+const saveMessage = require('../utils/saveMessage');
 
-async function alertTutorService(tutorEmail, tutorName, studentName, studentEmail, studentNumber, tutorialTitle, amount) {
-    
+async function alertTutorService(tutorNumber, tutorName, studentName, studentEmail, studentNumber, tutorialTitle, amount) {
+
     const message = `Dear ${tutorName},\n
     We are happy to inform you that your tutorial service titled: "${tutorialTitle}" has been booked by a student from your campus at GHS${amount}.
     This amount will be processed and transfered into your Mobile Money account after the completion of this service. Have in mind that service fees would be deducted. \n
@@ -15,14 +15,14 @@ async function alertTutorService(tutorEmail, tutorName, studentName, studentEmai
     The Tutorium Team \n
     [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
-    const subject = "Tutorial Service Booked!";
+    const SMS = await saveMessage(message);
+    // Send SMS to admin
+    const smsMessage = `Hi tutor, a student booked your service. Review the details here: ${SMS}`;
+    let bookServiceSMS = await SMSServices.sendSMS(tutorNumber, smsMessage);
 
-    // Attempt to send the email
-    let Email = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
-
-    // Handle email send failure
-    if (!Email) {
-        return console.log('Error sending email');
+    // Handle sms send failure
+    if (!bookServiceSMS) {
+        console.log('Error sending SMS');
     }
 
 }

@@ -79,7 +79,7 @@ exports.handlePaystackCallback = async (req, res) => {
 
                         try {
                             await alertTutorService(
-                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorNumber,
                                 paymentDetails.tutorName,
                                 paymentDetails.studentName,
                                 paymentDetails.studentEmail,
@@ -136,7 +136,7 @@ exports.handlePaystackCallback = async (req, res) => {
 
                         try {
                             await alertTutorService(
-                                paymentDetails.tutorEmail,
+                                paymentDetails.tutorNumber,
                                 paymentDetails.tutorName,
                                 paymentDetails.studentName,
                                 paymentDetails.studentEmail,
@@ -199,7 +199,7 @@ exports.handlePaystackCallback = async (req, res) => {
                                 student.numberOfVideos++;
                                 await student.save();
 
-                                alertTutorVideo(paymentDetails.tutorEmail, paymentDetails.tutorName, paymentDetails.tutorialTitle, paymentDetails.amount);
+                                alertTutorVideo(paymentDetails.tutorNumber, paymentDetails.tutorName, paymentDetails.tutorialTitle, paymentDetails.amount);
 
                                 await BoughtVideoServices.createBoughtVideo(
                                     paymentDetails.tutorID,

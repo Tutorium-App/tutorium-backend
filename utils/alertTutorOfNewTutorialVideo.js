@@ -1,7 +1,7 @@
-const EmailServices = require('../services/email.services');
-const { sendErrorResponse } = require('../utils/errorHandler');
+const SMSServices = require('../services/sms.services');
+const saveMessage = require('../utils/saveMessage');
 
-async function alertTutorVideo(tutorEmail, tutorName, tutorialTitle, amount) {
+async function alertTutorVideo(tutorNumber, tutorName, tutorialTitle, amount) {
     
     const message = `Dear ${tutorName},\n
     We are happy to inform you that your tutorial video titled: "${tutorialTitle}" has been purchased by a student from your campus at GHS${amount}.
@@ -11,14 +11,14 @@ async function alertTutorVideo(tutorEmail, tutorName, tutorialTitle, amount) {
     The Tutorium Team \n
     [Customer service email: tutorium.customer@gmail.com. Email us here.]`;
 
-    const subject = "New Tutorial Video Purchase!";
+    const SMS = await saveMessage(message);
+    // Send SMS to admin
+    const smsMessage = `Hi tutor, a student bought your tutorial video. Review the details here: ${SMS}`;
+    let bookServiceSMS = await SMSServices.sendSMS(tutorNumber, smsMessage);
 
-    // Attempt to send the email
-    let Email = await EmailServices.sendEmail(tutorEmail, tutorName, subject, message);
-
-    // Handle email send failure
-    if (!Email) {
-        return console.log('Error sending email');
+    // Handle sms send failure
+    if (!bookServiceSMS) {
+        console.log('Error sending SMS');
     }
 
 }
