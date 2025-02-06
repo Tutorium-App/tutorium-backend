@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
 const messageModel = require('../models/message.model');
-const saveMessage = require('../utils/saveMessage');
 
 /**
  * Generates a random alphanumeric string of 6 characters (A-Z, a-z, 0-9)
