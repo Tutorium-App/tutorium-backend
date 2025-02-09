@@ -1,5 +1,5 @@
 const reviewModel = require('../models/reviews.model');
-const tutorialModel = require('../models/tutorial.model');
+const tutorialModel = require('../models/tutorialService.model');
 const tutorModel = require('../models/tutor.model');
 
 class ReviewServices {
