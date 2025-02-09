@@ -131,7 +131,7 @@ class PaymentServices {
             const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
             
             if (paymentData) {
-                await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, newAmount, category);
+                await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category);
             }
     
             return paymentData;
