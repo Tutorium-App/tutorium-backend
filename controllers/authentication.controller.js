@@ -28,7 +28,7 @@ exports.storeStudentData = async (req, res, next) => {
         const subject = "Welcome to Tutorium!!!";
 
         // Attempt to send the email
-        let studentEmail = await EmailServices.sendEmail(email, fullName, subject, message);
+        const studentEmail = await EmailServices.sendEmail(email, fullName, subject, message);
 
         // Handle email send failure
         if (!studentEmail) {
