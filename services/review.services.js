@@ -76,6 +76,7 @@ class ReviewServices {
     // Function to update tutorial's rating
     static async updateTutorialRating(tutorialID, newRating) {
         try {
+            console.log(tutorialID)
             const filter = { _id: tutorialID };
             const tutorial = await tutorialModel.findOne(filter);
 
