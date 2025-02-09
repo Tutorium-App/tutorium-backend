@@ -26,13 +26,13 @@ class PaymentServices {
     static async makePayment(paymentData) {
         const provider = getMobileProvider(paymentData.studentNumber);
         const cost = paymentData.amount;
-        const finalCost = 0.05 * cost;
-        
+        const finalCost = (0.05 * cost) * 100;
+
         return new Promise(async (resolve, reject) => {
             try {
                 Paystack.transaction.initialize({
                     email: paymentData.studentEmail,
-                    amount: finalCost * 100,
+                    amount: finalCost,
                     currency: "GHS",
                     channels: ['mobile_money'],
                     mobile_money: {
