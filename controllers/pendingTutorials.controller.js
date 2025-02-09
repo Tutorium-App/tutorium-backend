@@ -40,9 +40,9 @@ exports.fetchPendingTutorials = async (req, res, next) => {
 // Function to create a pending tutorial service
 exports.createPendingTutorial = async (req, res, next) => {
     try {
-        const { tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL } = req.body;
+        const { tutorialID, tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL, category } = req.body;
 
-        const data = await PendingTutorialServices.createPendingTutorial(tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL);
+        const data = await PendingTutorialServices.createPendingTutorial(tutorialID, tutorID, studentID, tutorName, studentName, studentEmail, tutorEmail, tutorialTitle, cost, qrCode, tutorNumber, studentNumber, imageURL, category);
 
         if (!data) {
             return sendErrorResponse(res, 500, 'Error createing pending tutorial');

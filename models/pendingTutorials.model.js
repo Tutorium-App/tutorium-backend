@@ -6,6 +6,9 @@ const pendingTutorialSchema = new Schema({
     tutorID: {
         type: String,
     },
+    tutorialID: {
+        type: String,
+    },
     studentID: {
         type: String,
     },
