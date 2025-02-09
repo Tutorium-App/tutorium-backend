@@ -1,4 +1,5 @@
 const reviewModel = require('../models/reviews.model');
+const tutorialModel = require('../models/tutorial.model');
 const tutorModel = require('../models/tutor.model');
 
 class ReviewServices {
@@ -30,6 +31,9 @@ class ReviewServices {
 
             // Update tutor's rating
             await this.updateTutorRating(tutorID, rating);
+
+            // Update tutorial's rating
+            await this.updateTutorialRating(tutorialID, rating);
 
             return newReview;
         } catch (error) {
@@ -68,7 +72,39 @@ class ReviewServices {
             throw error;
         }
     }
+
+    // Function to update tutorial's rating
+    static async updateTutorialRating(tutorialID, newRating) {
+        try {
+            const filter = { tutorialID };
+            const tutorial = await tutorialModel.findOne(filter);
+
+            if (!tutorial) {
+                throw new Error("Tutorial not found");
+            }
+
+            const oldRating = tutorial.rating || 0;
+            const totalRatings = tutorial.numberOfRatings || 0;
+            const newRatingCount = totalRatings + 1;
+            const newAverageRating = ((oldRating * totalRatings + newRating) / newRatingCount).toFixed(1);
+
+            const update = {
+                $inc: { numberOfRatings: 1 },
+                $set: { rating: parseFloat(newAverageRating) } // Ensure the rating is stored as a number
+            };
+
+            const result = await tutorialModel.updateOne(filter, update);
+
+            if (result.nModified === 0) {
+                throw new Error("Failed to update tutorial rating");
+            }
+        } catch (error) {
+            console.error("Error updating tutorial rating:", error);
+            throw error;
+        }
+    }
 }
 
 
 module.exports = ReviewServices;
+

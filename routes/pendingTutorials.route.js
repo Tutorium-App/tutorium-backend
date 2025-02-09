@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const pendingTutorialsController = require('../controllers/pendingTutorials.controller');
 
+// verify a pending tutorial for payment
+router.post('/verifyQRCode', pendingTutorialsController.verifyQRCode);
+
 // fetch pending tutorials for payment
 router.get('/fetchPendingTutorials', pendingTutorialsController.fetchPendingTutorials);
 

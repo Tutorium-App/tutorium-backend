@@ -1,6 +1,24 @@
 const PendingTutorialServices = require('../services/pendingTutorials.services');
 const { sendErrorResponse } = require('../utils/errorHandler');
+const pendingTutorialModel = require('../models/pendingTutorials.model');
 
+
+// Function to check if a pending tutorial exists with the provided qrCode
+exports.verifyQRCode = async (req, res, next) => {
+    try {
+        const { qrCode } = req.query;
+
+        const pendingTutorial = await pendingTutorialModel.findOne({ qrCode: qrCode });
+
+        if (!pendingTutorial) {
+            return sendErrorResponse(res, 400, 'Pending tutorial does not exist');
+        }
+
+        res.json({ status: true, success: 'Pending tutorial found' });
+    } catch (error) {
+        next(error);
+    }
+}
 
 // Function to fetch all pending tutorials from the database
 exports.fetchPendingTutorials = async (req, res, next) => {
