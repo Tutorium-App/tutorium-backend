@@ -297,7 +297,7 @@ exports.handlePaystackCallback = async (req, res) => {
                     await HistoryServices.createHistory(paymentDetail.tutorID, paymentDetail.tutorName, paymentDetail.studentID, paymentDetail.title, paymentDetail.category, formattedDate, paymentDetail.amount);
 
                     await payTutorDetailsModel.deleteOne({ reference: ref });
-                    await PendingTutorialServices.deletePendingTutorial(paymentDetail.tutorialID);
+                    await PendingTutorialServices.deletePendingTutorial(paymentDetail.pendingTutorialID);
                 }
 
                 const paymentDs = await payTutorForVideosDetailsModel.findOne({ reference: ref });

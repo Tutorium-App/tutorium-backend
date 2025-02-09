@@ -117,7 +117,7 @@ class PaymentServices {
     }
 
 
-    static async payTutor(tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
+    static async payTutor(pendingTutorialID, tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID) {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
@@ -131,7 +131,7 @@ class PaymentServices {
             const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
             
             if (paymentData) {
-                await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category);
+                await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, pendingTutorialID, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category);
             }
     
             return paymentData;

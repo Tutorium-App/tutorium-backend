@@ -62,9 +62,9 @@ exports.makePayment = async (req, res, next) => {
 // Function to pay tutor
 exports.payTutor = async (req, res, next) => {
     try {
-        const { tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID } = req.body;
+        const { pendingTutorialID, tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID } = req.body;
 
-        const payment = await PaymentServices.payTutor(tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID);
+        const payment = await PaymentServices.payTutor(pendingTutorialID, tutorialID, tutorID, tutorName, title, category, amount, tutorNumber, tutorEmail, studentID);
 
         if (!payment) {
             return res.status(500).json({ status: false, message: 'Error making payment' });
