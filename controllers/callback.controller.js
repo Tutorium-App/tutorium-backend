@@ -112,22 +112,6 @@ exports.handlePaystackCallback = async (req, res) => {
                                 paymentDetails.studentNumber,
                                 paymentDetails.imageURL
                             );
-                            console.log(
-                                paymentDetails.tutorialID,
-                                paymentDetails.tutorID,
-                                paymentDetails.studentID,
-                                paymentDetails.tutorName,
-                                paymentDetails.studentName,
-                                paymentDetails.studentEmail,
-                                paymentDetails.tutorEmail,
-                                paymentDetails.tutorialTitle,
-                                paymentDetails.amount,
-                                qrCode,
-                                paymentDetails.category,
-                                paymentDetails.tutorNumber,
-                                paymentDetails.studentNumber,
-                                paymentDetails.imageURL
-                            );
                             console.log("created pending tutorial");
                         } catch (err) {
                             console.error('Error creating pending tutorial:', err);
@@ -171,22 +155,6 @@ exports.handlePaystackCallback = async (req, res) => {
                             const qrCode = generateRandomCode(paymentDetails.tutorialID);
 
                             await PendingTutorialServices.createPendingTutorial(
-                                paymentDetails.tutorialID,
-                                paymentDetails.tutorID,
-                                paymentDetails.studentID,
-                                paymentDetails.tutorName,
-                                paymentDetails.studentName,
-                                paymentDetails.studentEmail,
-                                paymentDetails.tutorEmail,
-                                paymentDetails.tutorialTitle,
-                                paymentDetails.amount,
-                                qrCode,
-                                paymentDetails.category,
-                                paymentDetails.tutorNumber,
-                                paymentDetails.studentNumber,
-                                paymentDetails.imageURL
-                            );
-                            console.log(
                                 paymentDetails.tutorialID,
                                 paymentDetails.tutorID,
                                 paymentDetails.studentID,
