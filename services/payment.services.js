@@ -25,11 +25,14 @@ class PaymentServices {
 
     static async makePayment(paymentData) {
         const provider = getMobileProvider(paymentData.studentNumber);
+        const cost = paymentData.amount;
+        const finalCost = 0.05 * cost;
+        
         return new Promise(async (resolve, reject) => {
             try {
                 Paystack.transaction.initialize({
                     email: paymentData.studentEmail,
-                    amount: paymentData.amount * 100,
+                    amount: finalCost * 100,
                     currency: "GHS",
                     channels: ['mobile_money'],
                     mobile_money: {
@@ -117,7 +120,7 @@ class PaymentServices {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
-        const newAmount = amount - (amount * 0.10);
+        const newAmount = amount - (amount * 0.20);
     
         try {
             // Create transfer recipient
