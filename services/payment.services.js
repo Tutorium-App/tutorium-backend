@@ -59,7 +59,7 @@ class PaymentServices {
                 reject(error);
             }
         });
-    }    
+    }
 
 
     static async createTransfer(name, accountNumber, bankCode) {
@@ -121,26 +121,26 @@ class PaymentServices {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
-        const newAmount = amount - (amount * 0.20);
-    
+        const newAmount = amount - (amount * 0.30);
+
         try {
             // Create transfer recipient
             const recipientCode = await PaymentServices.createTransfer(tutorName, tutorNumber, bankCode);
-            
+
             // Make transfer
             const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
-            
+
             if (paymentData) {
                 await PaymentDetailsServices.storePayTutorDetails(reference, recipientCode, pendingTutorialID, tutorialID, tutorID, tutorName, tutorEmail, studentID, tutorNumber, title, amount, category);
             }
-    
+
             return paymentData;
         } catch (error) {
             console.error('Error in payTutor service method:', error); // Log the error for debugging
             throw new Error('Failed to process tutor payment'); // Throw a generic error message
         }
     }
-    
+
 
 
     // function to pay tutor after student has paid for tutorial video
@@ -148,7 +148,7 @@ class PaymentServices {
         const reason = "Pay Tutorium tutor.";
         const reference = generateTransferReference();
         const bankCode = getMobileProvider(tutorNumber).toUpperCase();
-        var newAmount = amount - (amount * 0.10);
+        var newAmount = amount - (amount * 0.30);
         try {
             // Create transfer recipient
             const recipientCode = await PaymentServices.createTransfer(tutorName, tutorNumber, bankCode);
@@ -158,8 +158,8 @@ class PaymentServices {
             const paymentData = await PaymentServices.makeTransfer(newAmount, recipientCode, reference, reason);
             // console.log("Payment data:", paymentData);
 
-            if(paymentData){
-                const payTutorForVideoDetails = await PaymentDetailsServices.storePayTutorForVideoDetails(reference, recipientCode, tutorName, tutorNumber, newAmount);
+            if (paymentData) {
+                await PaymentDetailsServices.storePayTutorForVideoDetails(reference, recipientCode, tutorName, tutorNumber, amount);
             }
 
             return paymentData;
@@ -170,8 +170,26 @@ class PaymentServices {
         }
     }
 
-
-
+    // function to store transaction details in the database
+    static async storeTransactionDetails(tutorialType, amount) {
+        try {
+            const date = new Date().toLocaleString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }).split('/').reverse().join('-');
+            const time = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            const transaction = new transactionModel({
+                date,
+                time,
+                tutorialType,
+                amountPaid: amount,
+                tutorAmount: amount - (amount * 0.30),
+                tutoriumProfit: amount * 0.30
+            });
+            await transaction.save();
+            return transaction;
+        } catch (error) {
+            console.error('Error storing transaction details:', error);
+            return null;
+        }
+    }
 }
 
 module.exports = PaymentServices;

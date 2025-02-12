@@ -67,7 +67,6 @@ exports.handlePaystackCallback = async (req, res) => {
                                 return res.status(404).send('Tutor not found');
                             }
 
-                            tutor.sales++;
                             tutor.balance += paymentDetails.amount;
 
                             await tutor.save();
@@ -125,7 +124,6 @@ exports.handlePaystackCallback = async (req, res) => {
                                 return res.status(404).send('Tutor not found');
                             }
 
-                            tutor.sales++;
                             tutor.balance += paymentDetails.amount;
 
                             await tutor.save();
@@ -190,11 +188,13 @@ exports.handlePaystackCallback = async (req, res) => {
                             if (video) {
                                 console.log("Processing video purchase...");
                                 await PaymentServices.payTutorForVideo(paymentDetails.amount, paymentDetails.tutorNumber, paymentDetails.tutorName);
+                                await PaymentServices.storeTransactionDetails('video', paymentDetails.amount);
                                 video.sales++;
                                 await video.save();
 
                                 const tutor = await tutorModel.findOne({ tutorID: paymentDetails.tutorID });
                                 tutor.sales++;
+                                tutor.numberOfVideos++;
                                 await tutor.save();
 
                                 const student = await studentModel.findOne({ studentID: paymentDetails.studentID });
@@ -271,9 +271,11 @@ exports.handlePaystackCallback = async (req, res) => {
                 // console.log('Transfer reference:', ref);
 
                 let paymentDetail = await payTutorDetailsModel.findOne({ reference: ref });
-                //console.log("data: ", paymentDetail);
+                
                 if (paymentDetail) {
-                    //console.log("running insider");
+                    await PendingTutorialServices.deletePendingTutorial(paymentDetail.pendingTutorialID);
+                    await PaymentServices.storeTransactionDetails('service', paymentDetail.amount);
+
                     const currentDate = new Date();
 
                     function formatDate(date) {
@@ -292,12 +294,13 @@ exports.handlePaystackCallback = async (req, res) => {
 
                     const tutor = await tutorModel.findOne({ tutorID: paymentDetail.tutorID });
                     tutor.balance -= paymentDetail.amount;
+                    tutor.numberOfServices++;
+                    tutor.sales++;
                     await tutor.save();
 
                     await HistoryServices.createHistory(paymentDetail.tutorID, paymentDetail.tutorName, paymentDetail.studentID, paymentDetail.title, paymentDetail.category, formattedDate, paymentDetail.amount);
 
                     await payTutorDetailsModel.deleteOne({ reference: ref });
-                    await PendingTutorialServices.deletePendingTutorial(paymentDetail.pendingTutorialID);
                 }
 
                 const paymentDs = await payTutorForVideosDetailsModel.findOne({ reference: ref });
