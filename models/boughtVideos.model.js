@@ -3,6 +3,9 @@ const db = require('../config/db');
 const { Schema } = mongoose;
 
 const boughtTutorialVideoSchema = new Schema({
+    studentID: {
+        type: String,
+    },
     tutorID: {
         type: String,
     },
@@ -44,7 +47,7 @@ const boughtTutorialVideoSchema = new Schema({
     },
     sales: {
         type: Number,
-    },
+    }
 });
 
 const boughtTutorialVideoModel = db.model('BoughtTutorialVideos', boughtTutorialVideoSchema);

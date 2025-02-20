@@ -205,6 +205,7 @@ exports.handlePaystackCallback = async (req, res) => {
 
                                 await BoughtVideoServices.createBoughtVideo(
                                     paymentDetails.tutorID,
+                                    paymentDetails.studentID,
                                     paymentDetails.tutorName,
                                     paymentDetails.tutorEmail,
                                     paymentDetails.tutorNumber,

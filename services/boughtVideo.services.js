@@ -15,10 +15,10 @@ class BoughtVideoServices {
     }
 
     // Create a new review
-    static async createBoughtVideo(tutorID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink) {
+    static async createBoughtVideo(tutorID, studentID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink) {
         try {
             const boughtVideo = new boughtVideoModel({
-                tutorID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink
+                tutorID, studentID, tutorName, tutorEmail, tutorNumber, title, category, description, dateCreated, school, cost, thumbnailLink, videoLink
             });
             await boughtVideo.save();
             return boughtVideo;
