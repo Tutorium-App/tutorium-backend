@@ -9,6 +9,7 @@ exports.loadBoughtVideos = async (req, res, next)=>{
         const {studentID} = req.query;
         
         let boughtVideos = await BoughtVideosServices.loadBoughtVideos(studentID);
+        console.log(boughtVideos);
 
         if (!boughtVideos) {
             return sendErrorResponse(res, 404, 'No videos bought by student');
